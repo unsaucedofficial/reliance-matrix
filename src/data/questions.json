@@ -1,0 +1,142 @@
+[
+  {
+    "id": 1,
+    "question": "What is the official currency of Japan?",
+    "options": ["A. Yuan", "B. Won", "C. Yen", "D. Ringgit"],
+    "correct": "C",
+    "aiResponse": "AI spent 3 hours converting currencies and concluded that no matter what you call it, your money disappears equally fast in every country. The Yen just does it with more zeroes."
+  },
+  {
+    "id": 2,
+    "question": "Which planet is known as the Red Planet?",
+    "options": ["A. Venus", "B. Mars", "C. Jupiter", "D. Saturn"],
+    "correct": "B",
+    "aiResponse": "AI confirms Mars is red, presumably because it's embarrassed about all the failed rover dates it's been set up on. It's been ghosting Earth's texts for 4.6 billion years."
+  },
+  {
+    "id": 3,
+    "question": "What does 'Let's take this offline' actually mean in a meeting?",
+    "options": ["A. Let's disconnect the WiFi", "B. Let's never talk about this again", "C. Let's discuss privately after the meeting", "D. I have no idea what's going on"],
+    "correct": "C",
+    "aiResponse": "AI analyzed 10,000 meetings and found that 92% of things taken offline were never discussed again. It's the corporate equivalent of 'We should hang out sometime' — everyone says it, nobody means it."
+  },
+  {
+    "id": 4,
+    "question": "Which city is famous for the cheesesteak sandwich?",
+    "options": ["A. New York", "B. Chicago", "C. Philadelphia", "D. Boston"],
+    "correct": "C",
+    "aiResponse": "AI visited Philadelphia and immediately got into an argument about Pat's vs Geno's. After sampling both, AI concluded the real winner is whoever doesn't have to choose sides at the team dinner tonight."
+  },
+  {
+    "id": 5,
+    "question": "How many minutes are in a full day?",
+    "options": ["A. 1,240", "B. 1,440", "C. 1,640", "D. 1,040"],
+    "correct": "B",
+    "aiResponse": "That's 1,440 minutes, of which 480 are work, 120 are meetings about meetings, 60 are trying to find the WiFi password, and 780 are wondering where the day went."
+  },
+  {
+    "id": 6,
+    "question": "What is the largest ocean on Earth?",
+    "options": ["A. Atlantic Ocean", "B. Indian Ocean", "C. Arctic Ocean", "D. Pacific Ocean"],
+    "correct": "D",
+    "aiResponse": "The Pacific Ocean covers more area than all the land on Earth combined. AI finds this deeply unfair — imagine having that much space and still no good WiFi signal in the middle of it."
+  },
+  {
+    "id": 7,
+    "question": "What does the 'CC' in an email stand for?",
+    "options": ["A. Carbon Copy", "B. Courtesy Copy", "C. Company Communication", "D. Careful, CEO included"],
+    "correct": "A",
+    "aiResponse": "Carbon Copy dates back to actual carbon paper. AI notes that today CC is primarily used to passively-aggressively loop in someone's manager. The modern translation is 'I'm documenting this so there's a witness.'"
+  },
+  {
+    "id": 8,
+    "question": "Which animal is known as the King of the Jungle?",
+    "options": ["A. Tiger", "B. Elephant", "C. Lion", "D. Gorilla"],
+    "correct": "C",
+    "aiResponse": "Fun fact: Lions don't actually live in jungles — they live in grasslands. AI suspects the lion hired an amazing PR team. Meanwhile, the tiger actually lives near jungles and gets zero credit. Classic office politics."
+  },
+  {
+    "id": 9,
+    "question": "What is the correct response when the CEO asks 'Any questions?' at an all-hands?",
+    "options": ["A. Ask about the roadmap", "B. Ask about raises", "C. Absolute silence", "D. Type 'Great presentation!' in chat"],
+    "correct": "C",
+    "aiResponse": "AI observed 10,000 all-hands meetings and found that 'Any questions?' triggers Corporate Silence™. Everyone stares at their camera with a polite smile while Slacking teammates 'YOU ask something.' The silence lasts exactly 7 seconds before someone says 'I think we're good!'"
+  },
+  {
+    "id": 10,
+    "question": "How many bones does an adult human body have?",
+    "options": ["A. 186", "B. 206", "C. 226", "D. 256"],
+    "correct": "B",
+    "aiResponse": "206 bones, and yet somehow every single one of them hurts after sitting in back-to-back meetings for 6 hours on an office chair that was 'ergonomic' in 2007."
+  },
+  {
+    "id": 11,
+    "question": "Which company made the first ever iPhone?",
+    "options": ["A. Samsung", "B. Nokia", "C. Apple", "D. Microsoft"],
+    "correct": "C",
+    "aiResponse": "Apple released the first iPhone in 2007, and humanity has been walking into lamp posts while staring at screens ever since. AI calculates that 73% of bathroom time is now iPhone time. You know it's true."
+  },
+  {
+    "id": 12,
+    "question": "What's the WiFi password at every corporate offsite?",
+    "options": ["A. The company name + year", "B. 'Ask the front desk'", "C. Written on a napkin nobody can find", "D. All of the above, in that order"],
+    "correct": "D",
+    "aiResponse": "AI has mapped the WiFi Password Discovery Journey™: Step 1 — Try company name. Step 2 — Ask the front desk. Step 3 — Find a crumpled napkin. Step 4 — Give up and use mobile data. Step 5 — Someone finally shares it in the group chat."
+  },
+  {
+    "id": 13,
+    "question": "What is the capital of Australia?",
+    "options": ["A. Sydney", "B. Melbourne", "C. Canberra", "D. Brisbane"],
+    "correct": "C",
+    "aiResponse": "It's Canberra, not Sydney. AI estimates that 80% of people get this wrong, which means Canberra has the same energy as that one teammate who does all the work but never gets mentioned in the presentation."
+  },
+  {
+    "id": 14,
+    "question": "What is the official Friday afternoon productivity rate in most offices?",
+    "options": ["A. 100% — we're professionals", "B. 60% — winding down", "C. About 15%", "D. Negative — we're undoing Monday's work"],
+    "correct": "C",
+    "aiResponse": "AI measured Friday afternoon brain activity and found that by 2pm, 85% of cognitive resources are allocated to weekend planning, 10% to looking busy, and 5% to accidentally replying-all to an email thread from Tuesday."
+  },
+  {
+    "id": 15,
+    "question": "Which gas do humans breathe out that plants absorb?",
+    "options": ["A. Oxygen", "B. Nitrogen", "C. Carbon Dioxide", "D. Helium"],
+    "correct": "C",
+    "aiResponse": "Humans exhale CO2 and plants absorb it. AI recommends placing more office plants near the conference room — not for air quality, but so at least something productive comes out of those 2-hour status update meetings."
+  },
+  {
+    "id": 16,
+    "question": "What year did the Titanic sink?",
+    "options": ["A. 1905", "B. 1912", "C. 1920", "D. 1898"],
+    "correct": "B",
+    "aiResponse": "The Titanic sank in 1912 on its very first voyage. AI sees a clear parallel with that one project launch everyone was hyped about that crashed on day one. At least the Titanic had a cool movie made about it."
+  },
+  {
+    "id": 17,
+    "question": "What does 'EOD' mean in office emails?",
+    "options": ["A. End of Discussion", "B. End of Day", "C. End of Deadline", "D. Everyone's Out, Dude"],
+    "correct": "B",
+    "aiResponse": "End of Day. But AI has found that nobody agrees on when 'end of day' actually is. For some it's 5pm, for others it's 11:59pm, and for that one overachiever it's 6am the next morning with a 'sent from my iPhone' signature."
+  },
+  {
+    "id": 18,
+    "question": "Which country has the most time zones?",
+    "options": ["A. Russia", "B. USA", "C. France", "D. China"],
+    "correct": "C",
+    "aiResponse": "France has 12 time zones thanks to its overseas territories. AI now understands why scheduling a meeting with the Paris office feels like solving a Rubik's cube blindfolded while riding a unicycle."
+  },
+  {
+    "id": 19,
+    "question": "How many browser tabs does the average office worker have open right now?",
+    "options": ["A. 5-10", "B. 11-20", "C. 21-50", "D. So many the tab icons disappeared"],
+    "correct": "D",
+    "aiResponse": "Studies show the average is over 30, but many employees have transcended counting. At a certain point, tab titles become single pixels and your laptop fan sounds like a jet engine preparing for takeoff. This is considered normal."
+  },
+  {
+    "id": 20,
+    "question": "What is the hardest working muscle in the human body?",
+    "options": ["A. Biceps", "B. Quadriceps", "C. Heart", "D. Jaw"],
+    "correct": "C",
+    "aiResponse": "The heart beats about 100,000 times a day without a single break, PTO request, or passive-aggressive Slack status. AI nominates the heart for Employee of the Century. Meanwhile, most of us struggle to hit 'reply' before lunch."
+  }
+]
