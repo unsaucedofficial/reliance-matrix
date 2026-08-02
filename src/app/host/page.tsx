@@ -84,7 +84,7 @@ function TimerRing({ time, total }: { time: number; total: number }) {
         <circle cx="60" cy="60" r={radius} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="8" />
         <circle
           cx="60" cy="60" r={radius} fill="none"
-          stroke={isUrgent ? '#ef4444' : '#00A0DF'}
+          stroke={isUrgent ? '#ef4444' : '#6366f1'}
           strokeWidth="8" strokeLinecap="round"
           strokeDasharray={circumference}
           strokeDashoffset={circumference - progress}
@@ -158,8 +158,8 @@ export default function HostDashboard() {
         {/* Header */}
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center gap-4 mb-8">
-            <div className="bg-white rounded-xl px-4 py-2 shadow-lg">
-              <img src="/logo.png" alt="Reliance Matrix" className="h-8 object-contain" />
+            <div className="bg-white rounded-2xl shadow-lg shadow-brand-500/10 overflow-hidden flex items-center justify-center" style={{ padding: '14px 28px' }}>
+              <img src="/logo.png" alt="Reliance Matrix" style={{ height: '48px', width: 'auto', display: 'block' }} />
             </div>
             <div>
               <h1 className="text-2xl font-extrabold gradient-text">Strategic Offsite 2026</h1>
@@ -238,8 +238,8 @@ export default function HostDashboard() {
         <ReactConfetti width={windowSize.w} height={windowSize.h} recycle={false} numberOfPieces={300} />
         <div className="max-w-4xl mx-auto pt-8">
           <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8">
-            <div className="inline-block bg-white rounded-xl px-5 py-2 shadow-lg mb-4">
-              <img src="/logo.png" alt="Reliance Matrix" className="h-10 object-contain" />
+            <div className="inline-flex items-center justify-center bg-white rounded-2xl shadow-lg shadow-brand-500/10 mb-4" style={{ padding: '20px 40px' }}>
+              <img src="/logo.png" alt="Reliance Matrix" style={{ height: '56px', width: 'auto', display: 'block' }} />
             </div>
             <h1 className="text-5xl font-extrabold gradient-text mb-2">🏆 Final Results</h1>
             <p className="text-gray-400">Reliance Matrix Strategic Offsite 2026</p>
@@ -316,8 +316,8 @@ export default function HostDashboard() {
         {/* Top bar */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="bg-white rounded-lg px-3 py-1.5 shadow">
-              <img src="/logo.png" alt="Reliance Matrix" className="h-6 object-contain" />
+            <div className="bg-white rounded-xl shadow-md shadow-brand-500/10 overflow-hidden flex items-center justify-center" style={{ padding: '10px 20px' }}>
+              <img src="/logo.png" alt="Reliance Matrix" style={{ height: '40px', width: 'auto', display: 'block' }} />
             </div>
             <div>
               <h1 className="text-lg font-bold">Strategic Offsite 2026</h1>

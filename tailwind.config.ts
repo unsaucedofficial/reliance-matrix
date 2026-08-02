@@ -7,23 +7,22 @@ const config: Config = {
     extend: {
       colors: {
         brand: {
-          50: '#e6f6fd',
-          100: '#b3e3f9',
-          200: '#80d0f5',
-          300: '#4dbdf1',
-          400: '#1aaaed',
-          500: '#00A0DF',
-          600: '#0080b3',
-          700: '#006087',
-          800: '#00405a',
-          900: '#00202d',
+          50: '#eef2ff',
+          100: '#e0e7ff',
+          200: '#c7d2fe',
+          300: '#a5b4fc',
+          400: '#818cf8',
+          500: '#6366f1',
+          600: '#4f46e5',
+          700: '#4338ca',
+          800: '#3730a3',
+          900: '#312e81',
         },
         accent: {
-          orange: '#D4962A',
-          gold: '#C78B20',
+          orange: '#f97316',
+          pink: '#ec4899',
           teal: '#14b8a6',
           yellow: '#eab308',
-          pink: '#ec4899',
         },
       },
       animation: {
@@ -37,8 +36,8 @@ const config: Config = {
       },
       keyframes: {
         pulseGlow: {
-          '0%, 100%': { boxShadow: '0 0 20px rgba(0, 160, 223, 0.3)' },
-          '50%': { boxShadow: '0 0 40px rgba(0, 160, 223, 0.6)' },
+          '0%, 100%': { boxShadow: '0 0 20px rgba(99, 102, 241, 0.3)' },
+          '50%': { boxShadow: '0 0 40px rgba(99, 102, 241, 0.6)' },
         },
         slideUp: {
           '0%': { transform: 'translateY(30px)', opacity: '0' },

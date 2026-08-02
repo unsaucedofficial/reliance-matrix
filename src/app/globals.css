@@ -3,14 +3,12 @@
 @tailwind utilities;
 
 :root {
-  --bg-primary: #0a1628;
-  --bg-secondary: #0f2038;
+  --bg-primary: #0f0f1a;
+  --bg-secondary: #1a1a2e;
   --bg-card: rgba(255, 255, 255, 0.05);
   --text-primary: #ffffff;
   --text-secondary: #a0a0b8;
-  --accent-gradient: linear-gradient(135deg, #00A0DF, #D4962A);
-  --rm-blue: #00A0DF;
-  --rm-gold: #D4962A;
+  --accent-gradient: linear-gradient(135deg, #6366f1, #ec4899, #f97316);
 }
 
 * {
@@ -44,18 +42,18 @@ body {
 }
 
 .gradient-text {
-  background: linear-gradient(135deg, #00A0DF, #D4962A);
+  background: linear-gradient(135deg, #6366f1, #ec4899, #f97316);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .gradient-bg {
-  background: linear-gradient(135deg, #00A0DF, #0080b3);
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
 }
 
 .gradient-bg-warm {
-  background: linear-gradient(135deg, #D4962A, #C78B20);
+  background: linear-gradient(135deg, #f97316, #ec4899);
 }
 
 .option-btn {
@@ -65,10 +63,10 @@ body {
 }
 
 .option-btn:hover:not(:disabled) {
-  background: rgba(0, 160, 223, 0.15);
-  border-color: rgba(0, 160, 223, 0.5);
+  background: rgba(99, 102, 241, 0.15);
+  border-color: rgba(99, 102, 241, 0.5);
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 160, 223, 0.2);
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.2);
 }
 
 .option-btn:active:not(:disabled) {
@@ -76,9 +74,9 @@ body {
 }
 
 .option-btn.selected {
-  background: rgba(0, 160, 223, 0.2);
-  border-color: #00A0DF;
-  box-shadow: 0 0 20px rgba(0, 160, 223, 0.3);
+  background: rgba(99, 102, 241, 0.2);
+  border-color: #6366f1;
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
 }
 
 .option-btn.correct {
@@ -119,8 +117,8 @@ body {
 
 .bg-grid {
   background-image:
-    linear-gradient(rgba(0, 160, 223, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 160, 223, 0.03) 1px, transparent 1px);
+    linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
   background-size: 60px 60px;
 }
 

@@ -32,7 +32,6 @@ interface AnswerReveal {
   aiResponse: string;
 }
 
-// ── Funny loading messages ──
 const loadingMessages = [
   'Warming up the quiz engine...',
   'Sharpening pencils digitally...',
@@ -43,7 +42,6 @@ const loadingMessages = [
   'Counting coffee cups...',
 ];
 
-// ── Countdown Component ──
 function CountdownRing({ time, total }: { time: number; total: number }) {
   const radius = 40;
   const circumference = 2 * Math.PI * radius;
@@ -56,7 +54,7 @@ function CountdownRing({ time, total }: { time: number; total: number }) {
         <circle cx="50" cy="50" r={radius} fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="6" />
         <circle
           cx="50" cy="50" r={radius} fill="none"
-          stroke={isUrgent ? '#ef4444' : '#00A0DF'}
+          stroke={isUrgent ? '#ef4444' : '#6366f1'}
           strokeWidth="6" strokeLinecap="round"
           strokeDasharray={circumference}
           strokeDashoffset={circumference - progress}
@@ -71,7 +69,6 @@ function CountdownRing({ time, total }: { time: number; total: number }) {
   );
 }
 
-// ── Main Page ──
 export default function ParticipantPage() {
   const [joined, setJoined] = useState(false);
   const [name, setName] = useState('');
@@ -176,9 +173,10 @@ export default function ParticipantPage() {
           animate={{ opacity: 1, y: 0 }}
           className="glass-card p-8 w-full max-w-md text-center"
         >
-          {/* Reliance Matrix Logo */}
-          <div className="mb-6 inline-block bg-white rounded-2xl px-6 py-3 shadow-lg">
-            <img src="/logo.png" alt="Reliance Matrix" className="h-12 object-contain" />
+          <div className="mb-6">
+            <div className="bg-white rounded-2xl px-8 py-4 inline-block shadow-lg shadow-brand-500/10">
+              <img src="/logo.png" alt="Reliance Matrix" className="h-16 w-auto object-contain" />
+            </div>
           </div>
           <h1 className="text-2xl font-extrabold gradient-text mb-1">Strategic Offsite 2026</h1>
           <p className="text-sm text-gray-400 mb-8">Team Quiz</p>
@@ -220,15 +218,15 @@ export default function ParticipantPage() {
           animate={{ opacity: 1 }}
           className="glass-card p-8 w-full max-w-md text-center"
         >
-          <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-gradient-to-br from-brand-500 to-accent-orange flex items-center justify-center">
+          <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-gradient-to-br from-brand-500 to-accent-pink flex items-center justify-center">
             <span className="text-2xl">🎯</span>
           </div>
           <h2 className="text-2xl font-bold mb-2">Welcome, {displayName}!</h2>
           <p className="text-gray-400 mb-6">{loadingMsg}</p>
           <div className="flex items-center justify-center gap-2">
             <div className="w-2 h-2 rounded-full bg-brand-500 animate-bounce" style={{ animationDelay: '0ms' }} />
-            <div className="w-2 h-2 rounded-full bg-accent-orange animate-bounce" style={{ animationDelay: '150ms' }} />
-            <div className="w-2 h-2 rounded-full bg-brand-300 animate-bounce" style={{ animationDelay: '300ms' }} />
+            <div className="w-2 h-2 rounded-full bg-accent-pink animate-bounce" style={{ animationDelay: '150ms' }} />
+            <div className="w-2 h-2 rounded-full bg-accent-orange animate-bounce" style={{ animationDelay: '300ms' }} />
           </div>
           <p className="text-sm text-gray-500 mt-6">Waiting for the host to start...</p>
           {gameState && (
@@ -296,7 +294,6 @@ export default function ParticipantPage() {
       {showConfetti && <ReactConfetti width={windowSize.w} height={windowSize.h} recycle={false} numberOfPieces={150} />}
 
       <div className="max-w-lg mx-auto pt-4 space-y-6">
-        {/* Header */}
         <div className="flex items-center justify-between">
           <span className="text-sm text-gray-400 font-medium">
             Q{gameState.currentQuestionIndex + 1}/{gameState.totalQuestions}
@@ -304,12 +301,10 @@ export default function ParticipantPage() {
           <span className="text-sm text-gray-400">{displayName}</span>
         </div>
 
-        {/* Timer */}
         {gameState.status === 'active' && !answerSubmitted && (
           <CountdownRing time={gameState.timeRemaining} total={20} />
         )}
 
-        {/* Paused */}
         {gameState.status === 'paused' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="glass-card p-6 text-center">
             <span className="text-4xl">⏸️</span>
@@ -317,7 +312,6 @@ export default function ParticipantPage() {
           </motion.div>
         )}
 
-        {/* Question */}
         {q && gameState.status !== 'paused' && (
           <motion.div
             key={q.id}
@@ -326,7 +320,6 @@ export default function ParticipantPage() {
             className="glass-card p-6"
           >
             <h2 className="text-xl font-bold leading-relaxed mb-6">{q.question}</h2>
-
             <div className={`space-y-3 ${showWrongAnim ? 'shake' : ''}`}>
               {q.options.map((opt) => (
                 <motion.button
@@ -343,7 +336,6 @@ export default function ParticipantPage() {
           </motion.div>
         )}
 
-        {/* Submitted feedback */}
         <AnimatePresence>
           {answerSubmitted && !answerReveal && (
             <motion.div
@@ -359,7 +351,6 @@ export default function ParticipantPage() {
           )}
         </AnimatePresence>
 
-        {/* Answer reveal */}
         <AnimatePresence>
           {answerReveal && (
             <motion.div
@@ -385,7 +376,6 @@ export default function ParticipantPage() {
                   </>
                 )}
               </div>
-
               <div className="bg-white/5 rounded-xl p-4 mt-4">
                 <p className="text-xs text-brand-400 font-semibold uppercase tracking-wider mb-2">🤖 AI Says</p>
                 <p className="text-sm text-gray-300 leading-relaxed">{answerReveal.aiResponse}</p>
