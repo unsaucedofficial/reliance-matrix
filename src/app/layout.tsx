@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Reliance Matrix — Team Quiz',
-  description: 'Live interactive quiz for the Reliance Matrix team offsite',
+  title: 'Reliance Matrix — Strategic Offsite 2026',
+  description: 'Live interactive quiz for the Reliance Matrix Strategic Offsite 2026',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

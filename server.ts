@@ -47,7 +47,7 @@ const questionsPath = path.join(__dirname, 'src', 'data', 'questions.json');
 const questions: Question[] = JSON.parse(fs.readFileSync(questionsPath, 'utf-8'));
 
 // ── Game State ─────────────────────────────────────────
-const QUESTION_TIME = 20; // seconds per question
+const QUESTION_TIME = 20;
 
 function generateSessionCode(): string {
   return Math.random().toString(36).substring(2, 8).toUpperCase();
@@ -93,7 +93,6 @@ function getQuestionStats() {
   let fastestCorrectName = '';
   if (correctAnswers.length > 0) {
     const fastest = correctAnswers.reduce((min, a) => a.time < min.time ? a : min, correctAnswers[0]);
-    // find participant name by matching answer time
     for (const [, p] of gameState.participants) {
       if (p.currentTime === fastest.time && p.currentAnswer === fastest.answer) {
         fastestCorrectName = p.name;
@@ -127,7 +126,6 @@ function broadcastGameState(io: SocketIOServer) {
     sessionCode: gameState.sessionCode,
   });
 
-  // Send limited state to participants (no correct answer)
   io.to('participants').emit('gameState', {
     status: gameState.status,
     currentQuestionIndex: gameState.currentQuestionIndex,
@@ -151,10 +149,8 @@ function startTimer(io: SocketIOServer) {
 
   timerInterval = setInterval(() => {
     if (gameState.status === 'paused') return;
-
     gameState.timeRemaining--;
     io.emit('timer', { timeRemaining: gameState.timeRemaining });
-
     if (gameState.timeRemaining <= 0) {
       if (timerInterval) clearInterval(timerInterval);
       gameState.status = 'showing_answer';
@@ -178,7 +174,6 @@ function resetGame() {
   gameState.timeRemaining = QUESTION_TIME;
   gameState.answers.clear();
   gameState.sessionCode = generateSessionCode();
-  // Keep participants but reset scores
   for (const [, p] of gameState.participants) {
     p.score = 0;
     p.totalTime = 0;
@@ -276,7 +271,6 @@ app.prepare().then(() => {
       const name = data.name.trim();
       if (!name) return;
 
-      // Check for duplicate names
       let displayName = name;
       let counter = 1;
       const existingNames = new Set(
@@ -300,7 +294,6 @@ app.prepare().then(() => {
 
       gameState.participants.set(socket.id, participant);
       socket.join('participants');
-
       socket.emit('joined', { name: displayName, sessionCode: gameState.sessionCode });
       broadcastGameState(io);
     });
@@ -308,7 +301,7 @@ app.prepare().then(() => {
     socket.on('participant:answer', (data: { answer: string }) => {
       const participant = gameState.participants.get(socket.id);
       if (!participant || gameState.status !== 'active') return;
-      if (participant.currentAnswer !== null) return; // already answered
+      if (participant.currentAnswer !== null) return;
 
       const timeTaken = gameState.questionStartTime
         ? Date.now() - gameState.questionStartTime
@@ -322,7 +315,6 @@ app.prepare().then(() => {
 
       const currentQ = questions[gameState.currentQuestionIndex];
       if (currentQ && data.answer === currentQ.correct) {
-        // Score: base 1000 points, bonus for speed (up to 500 extra)
         const timeBonus = Math.max(0, Math.round(500 * (1 - timeTaken / (QUESTION_TIME * 1000))));
         participant.score += 1000 + timeBonus;
         participant.correctCount++;
@@ -340,11 +332,10 @@ app.prepare().then(() => {
     });
   });
 
-  // Let Next.js handle all other routes
   expressApp.all('*', (req: any, res: any) => handle(req, res));
 
   server.listen(port, hostname, () => {
-    console.log(`\n🎯 Reliance Metrics Quiz Server`);
+    console.log(`\n🎯 Reliance Matrix Quiz Server`);
     console.log(`   Local:    http://localhost:${port}`);
     console.log(`   Host:     http://localhost:${port}/host`);
     console.log(`   Session:  ${gameState.sessionCode}\n`);

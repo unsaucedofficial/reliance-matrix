@@ -57,6 +57,7 @@ function StatCard({ label, value, icon, color = 'brand' }: {
     orange: 'from-orange-500 to-orange-700',
     pink: 'from-pink-500 to-pink-700',
     teal: 'from-teal-500 to-teal-700',
+    gold: 'from-amber-500 to-amber-700',
   };
 
   return (
@@ -83,7 +84,7 @@ function TimerRing({ time, total }: { time: number; total: number }) {
         <circle cx="60" cy="60" r={radius} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="8" />
         <circle
           cx="60" cy="60" r={radius} fill="none"
-          stroke={isUrgent ? '#ef4444' : '#6366f1'}
+          stroke={isUrgent ? '#ef4444' : '#00A0DF'}
           strokeWidth="8" strokeLinecap="round"
           strokeDasharray={circumference}
           strokeDashoffset={circumference - progress}
@@ -119,7 +120,6 @@ export default function HostDashboard() {
 
     socket.on('gameState', (state: HostGameState) => {
       setGameState(prev => {
-        // Reset answer view on new question
         if (prev && state.currentQuestionIndex !== prev.currentQuestionIndex) {
           setShowAnswer(false);
           setShowConfetti(false);
@@ -158,11 +158,11 @@ export default function HostDashboard() {
         {/* Header */}
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center gap-4 mb-8">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-500 to-accent-pink flex items-center justify-center">
-              <span className="text-xl font-black text-white">RM</span>
+            <div className="bg-white rounded-xl px-4 py-2 shadow-lg">
+              <img src="/logo.png" alt="Reliance Matrix" className="h-8 object-contain" />
             </div>
             <div>
-              <h1 className="text-2xl font-extrabold gradient-text">Reliance Matrix</h1>
+              <h1 className="text-2xl font-extrabold gradient-text">Strategic Offsite 2026</h1>
               <p className="text-sm text-gray-400">Quiz Master Dashboard</p>
             </div>
           </div>
@@ -216,7 +216,7 @@ export default function HostDashboard() {
                       transition={{ delay: i * 0.05 }}
                       className="glass-card p-3 text-center"
                     >
-                      <div className="w-10 h-10 mx-auto rounded-full bg-gradient-to-br from-brand-500 to-accent-pink flex items-center justify-center text-white font-bold">
+                      <div className="w-10 h-10 mx-auto rounded-full bg-gradient-to-br from-brand-500 to-accent-orange flex items-center justify-center text-white font-bold">
                         {p.name.charAt(0).toUpperCase()}
                       </div>
                       <p className="text-sm font-medium mt-2 truncate">{p.name}</p>
@@ -238,8 +238,11 @@ export default function HostDashboard() {
         <ReactConfetti width={windowSize.w} height={windowSize.h} recycle={false} numberOfPieces={300} />
         <div className="max-w-4xl mx-auto pt-8">
           <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8">
+            <div className="inline-block bg-white rounded-xl px-5 py-2 shadow-lg mb-4">
+              <img src="/logo.png" alt="Reliance Matrix" className="h-10 object-contain" />
+            </div>
             <h1 className="text-5xl font-extrabold gradient-text mb-2">🏆 Final Results</h1>
-            <p className="text-gray-400">Reliance Matrix Team Offsite Quiz</p>
+            <p className="text-gray-400">Reliance Matrix Strategic Offsite 2026</p>
           </motion.div>
 
           {/* Podium */}
@@ -247,7 +250,7 @@ export default function HostDashboard() {
             {gameState.leaderboard.slice(0, 3).map((p, i) => {
               const heights = ['h-48', 'h-36', 'h-28'];
               const medals = ['🥇', '🥈', '🥉'];
-              const order = [1, 0, 2]; // 2nd, 1st, 3rd
+              const order = [1, 0, 2];
               const idx = order[i];
               const player = gameState.leaderboard[idx];
               if (!player) return null;
@@ -313,11 +316,11 @@ export default function HostDashboard() {
         {/* Top bar */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-accent-pink flex items-center justify-center">
-              <span className="font-black text-white text-sm">RM</span>
+            <div className="bg-white rounded-lg px-3 py-1.5 shadow">
+              <img src="/logo.png" alt="Reliance Matrix" className="h-6 object-contain" />
             </div>
             <div>
-              <h1 className="text-lg font-bold">Quiz Master</h1>
+              <h1 className="text-lg font-bold">Strategic Offsite 2026</h1>
               <p className="text-xs text-gray-400">Session: {gameState.sessionCode}</p>
             </div>
           </div>
@@ -420,7 +423,7 @@ export default function HostDashboard() {
                       </button>
                       <button
                         onClick={() => emit('host:showLeaderboard')}
-                        className="px-5 py-2.5 rounded-xl bg-pink-500/20 text-pink-400 font-semibold hover:bg-pink-500/30 transition-all"
+                        className="px-5 py-2.5 rounded-xl bg-amber-500/20 text-amber-400 font-semibold hover:bg-amber-500/30 transition-all"
                       >
                         🏆 Show Leaderboard
                       </button>
@@ -456,7 +459,7 @@ export default function HostDashboard() {
                       <StatCard icon="🎯" label="Correct" value={stats.correctCount} color="green" />
                       <StatCard icon="❌" label="Wrong" value={stats.wrongCount} color="red" />
                       <StatCard icon="⚡" label="Fastest" value={stats.fastestTime ? `${(stats.fastestTime / 1000).toFixed(1)}s` : '-'} color="orange" />
-                      <StatCard icon="📊" label="Avg Time" value={stats.avgTime ? `${(stats.avgTime / 1000).toFixed(1)}s` : '-'} color="pink" />
+                      <StatCard icon="📊" label="Avg Time" value={stats.avgTime ? `${(stats.avgTime / 1000).toFixed(1)}s` : '-'} color="gold" />
                       <StatCard icon="🏅" label="Fastest Correct" value={stats.fastestCorrectName || '-'} color="brand" />
                       <StatCard icon="📈" label="Accuracy" value={stats.totalAnswered > 0 ? `${Math.round(stats.correctCount / stats.totalAnswered * 100)}%` : '-'} color="teal" />
                     </div>

@@ -56,7 +56,7 @@ function CountdownRing({ time, total }: { time: number; total: number }) {
         <circle cx="50" cy="50" r={radius} fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="6" />
         <circle
           cx="50" cy="50" r={radius} fill="none"
-          stroke={isUrgent ? '#ef4444' : '#6366f1'}
+          stroke={isUrgent ? '#ef4444' : '#00A0DF'}
           strokeWidth="6" strokeLinecap="round"
           strokeDasharray={circumference}
           strokeDashoffset={circumference - progress}
@@ -101,7 +101,6 @@ export default function ParticipantPage() {
 
     socket.on('gameState', (state: GameState) => {
       setGameState(state);
-      // Reset answer state when new question arrives
       if (state.currentQuestionIndex !== prevQuestionRef.current) {
         setSelectedAnswer(null);
         setAnswerSubmitted(false);
@@ -177,12 +176,12 @@ export default function ParticipantPage() {
           animate={{ opacity: 1, y: 0 }}
           className="glass-card p-8 w-full max-w-md text-center"
         >
-          {/* Logo placeholder */}
-          <div className="w-20 h-20 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-brand-500 to-accent-pink flex items-center justify-center">
-            <span className="text-3xl font-black text-white">RM</span>
+          {/* Reliance Matrix Logo */}
+          <div className="mb-6 inline-block bg-white rounded-2xl px-6 py-3 shadow-lg">
+            <img src="/logo.png" alt="Reliance Matrix" className="h-12 object-contain" />
           </div>
-          <h1 className="text-3xl font-extrabold gradient-text mb-1">Reliance Matrix</h1>
-          <p className="text-sm text-gray-400 mb-8">Team Offsite Quiz</p>
+          <h1 className="text-2xl font-extrabold gradient-text mb-1">Strategic Offsite 2026</h1>
+          <p className="text-sm text-gray-400 mb-8">Team Quiz</p>
 
           <div className="space-y-4">
             <input
@@ -221,15 +220,15 @@ export default function ParticipantPage() {
           animate={{ opacity: 1 }}
           className="glass-card p-8 w-full max-w-md text-center"
         >
-          <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-gradient-to-br from-brand-500 to-accent-pink flex items-center justify-center">
+          <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-gradient-to-br from-brand-500 to-accent-orange flex items-center justify-center">
             <span className="text-2xl">🎯</span>
           </div>
           <h2 className="text-2xl font-bold mb-2">Welcome, {displayName}!</h2>
           <p className="text-gray-400 mb-6">{loadingMsg}</p>
           <div className="flex items-center justify-center gap-2">
             <div className="w-2 h-2 rounded-full bg-brand-500 animate-bounce" style={{ animationDelay: '0ms' }} />
-            <div className="w-2 h-2 rounded-full bg-accent-pink animate-bounce" style={{ animationDelay: '150ms' }} />
-            <div className="w-2 h-2 rounded-full bg-accent-orange animate-bounce" style={{ animationDelay: '300ms' }} />
+            <div className="w-2 h-2 rounded-full bg-accent-orange animate-bounce" style={{ animationDelay: '150ms' }} />
+            <div className="w-2 h-2 rounded-full bg-brand-300 animate-bounce" style={{ animationDelay: '300ms' }} />
           </div>
           <p className="text-sm text-gray-500 mt-6">Waiting for the host to start...</p>
           {gameState && (
