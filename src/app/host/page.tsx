@@ -16,6 +16,7 @@ interface Participant {
   correctCount: number;
   currentAnswer: string | null;
   currentTime: number | null;
+  isAI?: boolean;
 }
 
 interface QuestionStats {
@@ -26,6 +27,11 @@ interface QuestionStats {
   avgTime: number;
   fastestCorrectName: string;
   totalPlayers: number;
+  aiStats: {
+    aiAnswer: string | null;
+    aiTime: number | null;
+    aiCorrect: boolean;
+  } | null;
 }
 
 interface HostGameState {
@@ -44,6 +50,7 @@ interface HostGameState {
   leaderboard: Participant[];
   stats: QuestionStats | null;
   sessionCode: string;
+  aiPlayer: Participant | null;
 }
 
 // ── Stat Card ──
@@ -58,6 +65,7 @@ function StatCard({ label, value, icon, color = 'brand' }: {
     pink: 'from-pink-500 to-pink-700',
     teal: 'from-teal-500 to-teal-700',
     gold: 'from-amber-500 to-amber-700',
+    cyan: 'from-cyan-500 to-cyan-700',
   };
 
   return (
@@ -94,6 +102,54 @@ function TimerRing({ time, total }: { time: number; total: number }) {
         <span className={`text-4xl font-black ${isUrgent ? 'text-red-400 animate-pulse' : 'text-white'}`}>
           {time}
         </span>
+      </div>
+    </div>
+  );
+}
+
+// ── AI vs Humanity Score Card ──
+function AIvsHumanityCard({ aiPlayer, humanParticipants }: { aiPlayer: Participant | null; humanParticipants: Participant[] }) {
+  if (!aiPlayer) return null;
+
+  const avgHumanScore = humanParticipants.length > 0
+    ? Math.round(humanParticipants.reduce((sum, p) => sum + p.score, 0) / humanParticipants.length)
+    : 0;
+  const topHumanScore = humanParticipants.length > 0
+    ? Math.max(...humanParticipants.map(p => p.score))
+    : 0;
+  const humansBeatingAI = humanParticipants.filter(p => p.score > aiPlayer.score).length;
+  const aiWinning = aiPlayer.score > topHumanScore;
+
+  return (
+    <div className="glass-card p-5 border border-cyan-500/20">
+      <h3 className="text-sm font-bold uppercase tracking-wider text-cyan-400 mb-4 flex items-center gap-2">
+        <span>🤖</span> AI vs Humanity
+      </h3>
+      <div className="grid grid-cols-2 gap-4">
+        {/* AI Side */}
+        <div className={`rounded-2xl p-4 text-center ${aiWinning ? 'bg-cyan-500/15 ring-2 ring-cyan-500/40' : 'bg-white/5'}`}>
+          <p className="text-3xl mb-1">🤖</p>
+          <p className="text-xs text-gray-400 mb-1">AI Score</p>
+          <p className="text-3xl font-extrabold text-cyan-400">{aiPlayer.score}</p>
+          <p className="text-xs text-gray-500 mt-1">{aiPlayer.correctCount}/{aiPlayer.answeredCount} correct</p>
+        </div>
+        {/* Humanity Side */}
+        <div className={`rounded-2xl p-4 text-center ${!aiWinning && topHumanScore > 0 ? 'bg-brand-500/15 ring-2 ring-brand-500/40' : 'bg-white/5'}`}>
+          <p className="text-3xl mb-1">👥</p>
+          <p className="text-xs text-gray-400 mb-1">Top Human</p>
+          <p className="text-3xl font-extrabold text-brand-400">{topHumanScore}</p>
+          <p className="text-xs text-gray-500 mt-1">Avg: {avgHumanScore} pts</p>
+        </div>
+      </div>
+      <div className="mt-3 text-center">
+        <p className="text-sm font-semibold">
+          {humansBeatingAI === 0 && topHumanScore > 0
+            ? <span className="text-cyan-400">🤖 AI is dominating!</span>
+            : humansBeatingAI > 0
+            ? <span className="text-green-400">🎉 {humansBeatingAI} human{humansBeatingAI > 1 ? 's' : ''} beating AI!</span>
+            : <span className="text-gray-400">Game in progress...</span>
+          }
+        </p>
       </div>
     </div>
   );
@@ -151,11 +207,13 @@ export default function HostDashboard() {
 
   const appUrl = typeof window !== 'undefined' ? window.location.origin : '';
 
+  const humanParticipants = gameState?.participants.filter(p => !p.isAI) || [];
+  const aiPlayer = gameState?.aiPlayer || gameState?.participants.find(p => p.isAI) || null;
+
   // ── WAITING / LOBBY ──
   if (!gameState || gameState.status === 'waiting') {
     return (
       <div className="min-h-screen p-6">
-        {/* Header */}
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center gap-4 mb-8">
             <div className="bg-white rounded-2xl shadow-lg shadow-brand-500/10 overflow-hidden flex items-center justify-center" style={{ padding: '14px 28px' }}>
@@ -163,7 +221,7 @@ export default function HostDashboard() {
             </div>
             <div>
               <h1 className="text-2xl font-extrabold gradient-text">Strategic Offsite 2026</h1>
-              <p className="text-sm text-gray-400">Quiz Master Dashboard</p>
+              <p className="text-sm text-gray-400">🤖 AI vs Humanity — Quiz Challenge</p>
             </div>
           </div>
 
@@ -189,26 +247,38 @@ export default function HostDashboard() {
               className="glass-card p-8 lg:col-span-2"
             >
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold">Players ({gameState?.participants.length || 0})</h2>
+                <h2 className="text-xl font-bold">Players ({humanParticipants.length} + 🤖 AI)</h2>
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => emit('host:startQuiz')}
-                  disabled={!gameState || gameState.participants.length === 0}
+                  disabled={!gameState || humanParticipants.length === 0}
                   className="px-8 py-3 rounded-2xl gradient-bg text-white font-bold text-lg disabled:opacity-40 disabled:cursor-not-allowed shadow-lg shadow-brand-500/30"
                 >
                   🚀 Start Quiz
                 </motion.button>
               </div>
 
-              {(!gameState || gameState.participants.length === 0) ? (
+              {humanParticipants.length === 0 ? (
                 <div className="text-center py-12">
                   <span className="text-5xl">📱</span>
                   <p className="text-gray-400 mt-4">Waiting for players to scan and join...</p>
+                  <p className="text-sm text-cyan-400 mt-2">🤖 AI is ready and waiting to compete!</p>
                 </div>
               ) : (
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 max-h-96 overflow-y-auto scrollbar-hide">
-                  {gameState.participants.map((p, i) => (
+                  {/* AI Player Card */}
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="glass-card p-3 text-center border border-cyan-500/30 bg-cyan-500/5"
+                  >
+                    <div className="w-10 h-10 mx-auto rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center text-lg">
+                      🤖
+                    </div>
+                    <p className="text-sm font-medium mt-2 text-cyan-400">AI</p>
+                  </motion.div>
+                  {humanParticipants.map((p, i) => (
                     <motion.div
                       key={p.id}
                       initial={{ opacity: 0, scale: 0.8 }}
@@ -233,6 +303,9 @@ export default function HostDashboard() {
 
   // ── QUIZ ENDED ──
   if (gameState.status === 'ended') {
+    const aiRank = gameState.leaderboard.findIndex(p => p.isAI) + 1;
+    const totalPlayers = gameState.leaderboard.length;
+
     return (
       <div className="min-h-screen p-6">
         <ReactConfetti width={windowSize.w} height={windowSize.h} recycle={false} numberOfPieces={300} />
@@ -242,7 +315,42 @@ export default function HostDashboard() {
               <img src="/logo.png" alt="Reliance Matrix" style={{ height: '56px', width: 'auto', display: 'block' }} />
             </div>
             <h1 className="text-5xl font-extrabold gradient-text mb-2">🏆 Final Results</h1>
-            <p className="text-gray-400">Reliance Matrix Strategic Offsite 2026</p>
+            <p className="text-gray-400">AI vs Humanity — Strategic Offsite 2026</p>
+          </motion.div>
+
+          {/* AI vs Humanity Final Verdict */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2 }}
+            className="glass-card p-8 mb-8 text-center border border-cyan-500/20"
+          >
+            <h2 className="text-2xl font-bold mb-6">
+              {aiPlayer && aiRank === 1
+                ? <span className="text-cyan-400">🤖 AI Won! Machines: 1 — Humanity: 0</span>
+                : <span className="text-green-400">🎉 Humanity Wins! Take that, robots!</span>
+              }
+            </h2>
+            <div className="grid grid-cols-2 gap-6 max-w-md mx-auto">
+              <div className={`rounded-2xl p-5 ${aiRank === 1 ? 'bg-cyan-500/15 ring-2 ring-cyan-500/40' : 'bg-white/5'}`}>
+                <p className="text-4xl mb-2">🤖</p>
+                <p className="text-sm text-gray-400">AI</p>
+                <p className="text-3xl font-extrabold text-cyan-400">{aiPlayer?.score || 0}</p>
+                <p className="text-sm text-gray-500">Rank #{aiRank} of {totalPlayers}</p>
+                <p className="text-xs text-gray-500">{aiPlayer?.correctCount}/{aiPlayer?.answeredCount} correct</p>
+              </div>
+              <div className={`rounded-2xl p-5 ${aiRank !== 1 ? 'bg-brand-500/15 ring-2 ring-brand-500/40' : 'bg-white/5'}`}>
+                <p className="text-4xl mb-2">👥</p>
+                <p className="text-sm text-gray-400">Best Human</p>
+                <p className="text-3xl font-extrabold text-brand-400">
+                  {humanParticipants.length > 0 ? Math.max(...humanParticipants.map(p => p.score)) : 0}
+                </p>
+                <p className="text-sm text-gray-500">
+                  {humanParticipants.filter(p => aiPlayer && p.score > aiPlayer.score).length} beat AI
+                </p>
+                <p className="text-xs text-gray-500">{humanParticipants.length} players</p>
+              </div>
+            </div>
           </motion.div>
 
           {/* Podium */}
@@ -261,11 +369,11 @@ export default function HostDashboard() {
                   initial={{ opacity: 0, y: 50 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 + idx * 0.2, type: 'spring' }}
-                  className={`glass-card p-6 text-center flex flex-col items-center justify-end ${heights[idx]} w-48`}
+                  className={`glass-card p-6 text-center flex flex-col items-center justify-end ${heights[idx]} w-48 ${player.isAI ? 'border border-cyan-500/30' : ''}`}
                 >
                   <span className="text-4xl mb-2">{medals[idx]}</span>
-                  <p className="text-lg font-bold truncate w-full">{player.name}</p>
-                  <p className="text-3xl font-extrabold text-brand-400">{player.score}</p>
+                  <p className={`text-lg font-bold truncate w-full ${player.isAI ? 'text-cyan-400' : ''}`}>{player.name}</p>
+                  <p className={`text-3xl font-extrabold ${player.isAI ? 'text-cyan-400' : 'text-brand-400'}`}>{player.score}</p>
                   <p className="text-xs text-gray-400">{player.correctCount} correct</p>
                 </motion.div>
               );
@@ -280,16 +388,16 @@ export default function HostDashboard() {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.05 }}
-                className="glass-card p-4 flex items-center gap-4"
+                className={`glass-card p-4 flex items-center gap-4 ${p.isAI ? 'border border-cyan-500/20 bg-cyan-500/5' : ''}`}
               >
                 <span className="w-10 text-center text-lg font-bold text-gray-400">#{i + 1}</span>
                 <div className="flex-1 min-w-0">
-                  <p className="font-semibold truncate">{p.name}</p>
+                  <p className={`font-semibold truncate ${p.isAI ? 'text-cyan-400' : ''}`}>{p.name}</p>
                   <p className="text-xs text-gray-400">
                     {p.correctCount}/{p.answeredCount} correct &middot; avg {p.answeredCount > 0 ? Math.round(p.totalTime / p.answeredCount / 1000 * 10) / 10 : 0}s
                   </p>
                 </div>
-                <span className="text-xl font-bold text-brand-400">{p.score}</span>
+                <span className={`text-xl font-bold ${p.isAI ? 'text-cyan-400' : 'text-brand-400'}`}>{p.score}</span>
               </motion.div>
             ))}
           </div>
@@ -320,7 +428,7 @@ export default function HostDashboard() {
               <img src="/logo.png" alt="Reliance Matrix" style={{ height: '40px', width: 'auto', display: 'block' }} />
             </div>
             <div>
-              <h1 className="text-lg font-bold">Strategic Offsite 2026</h1>
+              <h1 className="text-lg font-bold">AI vs Humanity</h1>
               <p className="text-xs text-gray-400">Session: {gameState.sessionCode}</p>
             </div>
           </div>
@@ -368,7 +476,8 @@ export default function HostDashboard() {
                           {q.options.map((opt) => {
                             const letter = opt.charAt(0);
                             const isCorrect = letter === q.correct;
-                            let cls = 'p-4 rounded-2xl border-2 text-left font-medium transition-all';
+                            const isAIPick = showAnswer && aiPlayer?.currentAnswer === letter;
+                            let cls = 'p-4 rounded-2xl border-2 text-left font-medium transition-all relative';
                             if (showAnswer) {
                               cls += isCorrect
                                 ? ' bg-green-500/20 border-green-500 text-green-300'
@@ -380,10 +489,36 @@ export default function HostDashboard() {
                               <div key={opt} className={cls}>
                                 {opt}
                                 {showAnswer && isCorrect && <span className="ml-2">✅</span>}
+                                {isAIPick && (
+                                  <span className="absolute top-2 right-2 text-xs bg-cyan-500/20 text-cyan-400 px-2 py-0.5 rounded-full">
+                                    🤖 AI
+                                  </span>
+                                )}
                               </div>
                             );
                           })}
                         </div>
+
+                        {/* AI Answer reveal */}
+                        <AnimatePresence>
+                          {showAnswer && stats?.aiStats && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: 'auto' }}
+                              className="mt-4 bg-cyan-500/10 rounded-2xl p-4 border border-cyan-500/20"
+                            >
+                              <div className="flex items-center justify-between">
+                                <p className="text-xs text-cyan-400 font-semibold uppercase tracking-wider">🤖 AI picked: {stats.aiStats.aiAnswer}</p>
+                                <p className="text-xs text-gray-400">
+                                  in {stats.aiStats.aiTime !== null ? `${(stats.aiStats.aiTime / 1000).toFixed(1)}s` : '-'}
+                                </p>
+                              </div>
+                              <p className={`text-sm font-semibold mt-1 ${stats.aiStats.aiCorrect ? 'text-green-400' : 'text-red-400'}`}>
+                                {stats.aiStats.aiCorrect ? '✅ AI got it right!' : '❌ AI got it wrong!'}
+                              </p>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
 
                         {/* AI Response */}
                         <AnimatePresence>
@@ -454,25 +589,28 @@ export default function HostDashboard() {
                   {/* Stats grid */}
                   {stats && (
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                      <StatCard icon="👥" label="Total Players" value={stats.totalPlayers} color="brand" />
+                      <StatCard icon="👥" label="Human Players" value={stats.totalPlayers} color="brand" />
                       <StatCard icon="✅" label="Answered" value={`${stats.totalAnswered}/${stats.totalPlayers}`} color="teal" />
                       <StatCard icon="🎯" label="Correct" value={stats.correctCount} color="green" />
                       <StatCard icon="❌" label="Wrong" value={stats.wrongCount} color="red" />
-                      <StatCard icon="⚡" label="Fastest" value={stats.fastestTime ? `${(stats.fastestTime / 1000).toFixed(1)}s` : '-'} color="orange" />
+                      <StatCard icon="⚡" label="Fastest Human" value={stats.fastestTime ? `${(stats.fastestTime / 1000).toFixed(1)}s` : '-'} color="orange" />
                       <StatCard icon="📊" label="Avg Time" value={stats.avgTime ? `${(stats.avgTime / 1000).toFixed(1)}s` : '-'} color="gold" />
                       <StatCard icon="🏅" label="Fastest Correct" value={stats.fastestCorrectName || '-'} color="brand" />
-                      <StatCard icon="📈" label="Accuracy" value={stats.totalAnswered > 0 ? `${Math.round(stats.correctCount / stats.totalAnswered * 100)}%` : '-'} color="teal" />
+                      <StatCard icon="🤖" label="AI Time" value={aiPlayer?.currentTime ? `${(aiPlayer.currentTime / 1000).toFixed(1)}s` : 'Thinking...'} color="cyan" />
                     </div>
                   )}
                 </div>
 
-                {/* RIGHT: Timer + Mini Leaderboard */}
+                {/* RIGHT: Timer + AI vs Humanity + Live Responses */}
                 <div className="space-y-4">
                   {/* Timer */}
                   <div className="glass-card p-6 flex flex-col items-center">
                     <TimerRing time={gameState.timeRemaining} total={20} />
                     <p className="text-sm text-gray-400 mt-2">Time Remaining</p>
                   </div>
+
+                  {/* AI vs Humanity Card */}
+                  <AIvsHumanityCard aiPlayer={aiPlayer} humanParticipants={humanParticipants} />
 
                   {/* Progress */}
                   <div className="glass-card p-4">
@@ -493,8 +631,21 @@ export default function HostDashboard() {
                   <div className="glass-card p-4">
                     <h3 className="text-sm font-semibold mb-3 text-gray-300">Live Responses</h3>
                     <div className="space-y-2 max-h-64 overflow-y-auto scrollbar-hide">
+                      {/* AI response first if answered */}
+                      {aiPlayer?.currentAnswer && (
+                        <div className="flex items-center gap-2 text-sm bg-cyan-500/10 rounded-lg px-2 py-1.5 border border-cyan-500/20">
+                          <span className="text-cyan-400 w-5">🤖</span>
+                          <span className="flex-1 truncate text-cyan-400 font-medium">AI</span>
+                          <span className="text-xs text-cyan-400/70">
+                            {aiPlayer.currentTime ? `${(aiPlayer.currentTime / 1000).toFixed(1)}s` : ''}
+                          </span>
+                          {showAnswer && q && (
+                            <span>{aiPlayer.currentAnswer === q.correct ? '✅' : '❌'}</span>
+                          )}
+                        </div>
+                      )}
                       {gameState.participants
-                        .filter(p => p.currentAnswer)
+                        .filter(p => p.currentAnswer && !p.isAI)
                         .sort((a, b) => (a.currentTime || 0) - (b.currentTime || 0))
                         .map((p, i) => (
                           <div key={p.id} className="flex items-center gap-2 text-sm">
@@ -519,26 +670,26 @@ export default function HostDashboard() {
           ) : (
             <motion.div key="leaderboard" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
               <div className="max-w-2xl mx-auto space-y-3">
-                <h2 className="text-2xl font-bold text-center gradient-text mb-6">🏆 Live Leaderboard</h2>
+                <h2 className="text-2xl font-bold text-center gradient-text mb-6">🏆 AI vs Humanity — Live Leaderboard</h2>
                 {gameState.leaderboard.map((p, i) => (
                   <motion.div
                     key={p.name}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.05 }}
-                    className="glass-card p-4 flex items-center gap-4"
+                    className={`glass-card p-4 flex items-center gap-4 ${p.isAI ? 'border border-cyan-500/20 bg-cyan-500/5' : ''}`}
                   >
                     <span className="text-2xl w-12 text-center font-bold">
                       {i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `#${i + 1}`}
                     </span>
                     <div className="flex-1 min-w-0">
-                      <p className="font-semibold truncate text-lg">{p.name}</p>
+                      <p className={`font-semibold truncate text-lg ${p.isAI ? 'text-cyan-400' : ''}`}>{p.name}</p>
                       <p className="text-xs text-gray-400">
                         {p.correctCount}/{p.answeredCount} correct &middot; avg {p.answeredCount > 0 ? `${(p.totalTime / p.answeredCount / 1000).toFixed(1)}s` : '-'}
                       </p>
                     </div>
                     <div className="text-right">
-                      <p className="text-2xl font-extrabold text-brand-400">{p.score}</p>
+                      <p className={`text-2xl font-extrabold ${p.isAI ? 'text-cyan-400' : 'text-brand-400'}`}>{p.score}</p>
                       <p className="text-xs text-gray-500">points</p>
                     </div>
                   </motion.div>

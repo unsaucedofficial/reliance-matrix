@@ -6,6 +6,25 @@ import { motion, AnimatePresence } from 'framer-motion';
 import ReactConfetti from 'react-confetti';
 
 // ── Types ──
+interface LeaderboardEntry {
+  name: string;
+  score: number;
+  totalTime: number;
+  correctCount: number;
+  answeredCount: number;
+  isAI?: boolean;
+}
+
+interface AIPlayer {
+  name: string;
+  score: number;
+  correctCount: number;
+  answeredCount: number;
+  currentAnswer: string | null;
+  currentTime: number | null;
+  isAI: boolean;
+}
+
 interface GameState {
   status: string;
   currentQuestionIndex: number;
@@ -17,19 +36,16 @@ interface GameState {
   } | null;
   timeRemaining: number;
   sessionCode: string;
-  leaderboard: Array<{
-    name: string;
-    score: number;
-    totalTime: number;
-    correctCount: number;
-    answeredCount: number;
-  }>;
+  leaderboard: LeaderboardEntry[];
   totalPlayers: number;
+  aiPlayer: AIPlayer | null;
 }
 
 interface AnswerReveal {
   correct: string;
   aiResponse: string;
+  aiAnswer: string;
+  aiTime: number;
 }
 
 const loadingMessages = [
@@ -38,8 +54,8 @@ const loadingMessages = [
   'Bribing the leaderboard...',
   'Calibrating fun levels...',
   'Loading corporate humor...',
-  'Preparing brain teasers...',
-  'Counting coffee cups...',
+  'Teaching AI some humility...',
+  'Preparing human vs machine battle...',
 ];
 
 function CountdownRing({ time, total }: { time: number; total: number }) {
@@ -179,7 +195,7 @@ export default function ParticipantPage() {
             </div>
           </div>
           <h1 className="text-2xl font-extrabold gradient-text mb-1">Strategic Offsite 2026</h1>
-          <p className="text-sm text-gray-400 mb-8">Team Quiz</p>
+          <p className="text-sm text-cyan-400 mb-8">🤖 AI vs Humanity — Quiz Challenge</p>
 
           <div className="space-y-4">
             <input
@@ -199,7 +215,7 @@ export default function ParticipantPage() {
               disabled={!name.trim()}
               className="w-full py-4 rounded-2xl gradient-bg text-white font-bold text-lg disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-lg shadow-brand-500/30"
             >
-              Join Quiz
+              Join the Battle
             </motion.button>
           </div>
 
@@ -222,7 +238,8 @@ export default function ParticipantPage() {
             <span className="text-2xl">🎯</span>
           </div>
           <h2 className="text-2xl font-bold mb-2">Welcome, {displayName}!</h2>
-          <p className="text-gray-400 mb-6">{loadingMsg}</p>
+          <p className="text-gray-400 mb-4">{loadingMsg}</p>
+          <p className="text-sm text-cyan-400 mb-6">You'll be competing against 🤖 AI!</p>
           <div className="flex items-center justify-center gap-2">
             <div className="w-2 h-2 rounded-full bg-brand-500 animate-bounce" style={{ animationDelay: '0ms' }} />
             <div className="w-2 h-2 rounded-full bg-accent-pink animate-bounce" style={{ animationDelay: '150ms' }} />
@@ -230,7 +247,7 @@ export default function ParticipantPage() {
           </div>
           <p className="text-sm text-gray-500 mt-6">Waiting for the host to start...</p>
           {gameState && (
-            <p className="text-xs text-gray-600 mt-2">{gameState.totalPlayers} player{gameState.totalPlayers !== 1 ? 's' : ''} connected</p>
+            <p className="text-xs text-gray-600 mt-2">{gameState.totalPlayers} human player{gameState.totalPlayers !== 1 ? 's' : ''} + 🤖 AI connected</p>
           )}
         </motion.div>
       </div>
@@ -241,7 +258,10 @@ export default function ParticipantPage() {
   if (gameState.status === 'ended' || showLeaderboard) {
     const myRank = gameState.leaderboard.findIndex(p => p.name === displayName) + 1;
     const me = gameState.leaderboard.find(p => p.name === displayName);
+    const ai = gameState.leaderboard.find(p => p.isAI);
+    const aiRank = gameState.leaderboard.findIndex(p => p.isAI) + 1;
     const medal = myRank === 1 ? '🥇' : myRank === 2 ? '🥈' : myRank === 3 ? '🥉' : '';
+    const iBeatingAI = ai && me ? me.score > ai.score : false;
 
     return (
       <div className="min-h-screen p-4 pb-20">
@@ -251,7 +271,32 @@ export default function ParticipantPage() {
             <h1 className="text-3xl font-extrabold gradient-text mb-2">
               {gameState.status === 'ended' ? 'Quiz Complete!' : 'Leaderboard'}
             </h1>
-            {me && (
+
+            {/* Your score vs AI */}
+            {me && ai && gameState.status === 'ended' && (
+              <div className="glass-card p-5 mt-4 border border-cyan-500/20">
+                <p className="text-lg font-bold mb-3">
+                  {iBeatingAI
+                    ? <span className="text-green-400">🎉 You beat the AI!</span>
+                    : <span className="text-cyan-400">🤖 AI is ahead... for now</span>
+                  }
+                </p>
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="bg-white/5 rounded-xl p-3 text-center">
+                    <p className="text-xs text-gray-400">You</p>
+                    <p className="text-2xl font-extrabold text-brand-400">{me.score}</p>
+                    <p className="text-xs text-gray-500">#{myRank}</p>
+                  </div>
+                  <div className="bg-cyan-500/10 rounded-xl p-3 text-center">
+                    <p className="text-xs text-cyan-400">🤖 AI</p>
+                    <p className="text-2xl font-extrabold text-cyan-400">{ai.score}</p>
+                    <p className="text-xs text-gray-500">#{aiRank}</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {me && !ai && (
               <div className="glass-card p-6 mt-4">
                 <p className="text-5xl mb-2">{medal || '🎯'}</p>
                 <p className="text-xl font-bold">#{myRank} — {displayName}</p>
@@ -268,16 +313,18 @@ export default function ParticipantPage() {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.08 }}
-                className={`glass-card p-4 flex items-center gap-4 ${p.name === displayName ? 'ring-2 ring-brand-500' : ''}`}
+                className={`glass-card p-4 flex items-center gap-4 ${
+                  p.name === displayName ? 'ring-2 ring-brand-500' : ''
+                } ${p.isAI ? 'border border-cyan-500/20 bg-cyan-500/5' : ''}`}
               >
                 <span className="text-2xl w-10 text-center font-bold">
                   {i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `#${i + 1}`}
                 </span>
                 <div className="flex-1 min-w-0">
-                  <p className="font-semibold truncate">{p.name}</p>
+                  <p className={`font-semibold truncate ${p.isAI ? 'text-cyan-400' : ''}`}>{p.name}</p>
                   <p className="text-xs text-gray-400">{p.correctCount}/{p.answeredCount} correct</p>
                 </div>
-                <span className="text-xl font-bold text-brand-400">{p.score}</span>
+                <span className={`text-xl font-bold ${p.isAI ? 'text-cyan-400' : 'text-brand-400'}`}>{p.score}</span>
               </motion.div>
             ))}
           </div>
@@ -327,9 +374,14 @@ export default function ParticipantPage() {
                   whileTap={!answerSubmitted ? { scale: 0.97 } : {}}
                   onClick={() => handleAnswer(opt)}
                   disabled={answerSubmitted}
-                  className={getOptionClass(opt)}
+                  className={`${getOptionClass(opt)} relative`}
                 >
                   {opt}
+                  {answerReveal && opt.charAt(0) === answerReveal.aiAnswer && (
+                    <span className="absolute top-2 right-2 text-xs bg-cyan-500/20 text-cyan-400 px-2 py-0.5 rounded-full">
+                      🤖
+                    </span>
+                  )}
                 </motion.button>
               ))}
             </div>
@@ -376,7 +428,19 @@ export default function ParticipantPage() {
                   </>
                 )}
               </div>
-              <div className="bg-white/5 rounded-xl p-4 mt-4">
+
+              {/* AI's pick */}
+              <div className="bg-cyan-500/10 rounded-xl p-3 border border-cyan-500/20">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-cyan-400 font-semibold">🤖 AI picked: {answerReveal.aiAnswer}</span>
+                  <span className="text-xs text-gray-400">{(answerReveal.aiTime / 1000).toFixed(1)}s</span>
+                </div>
+                <p className={`text-xs font-semibold mt-1 ${answerReveal.aiAnswer === answerReveal.correct ? 'text-green-400' : 'text-red-400'}`}>
+                  {answerReveal.aiAnswer === answerReveal.correct ? '✅ AI got it right' : '❌ AI got it wrong!'}
+                </p>
+              </div>
+
+              <div className="bg-white/5 rounded-xl p-4">
                 <p className="text-xs text-brand-400 font-semibold uppercase tracking-wider mb-2">🤖 AI Says</p>
                 <p className="text-sm text-gray-300 leading-relaxed">{answerReveal.aiResponse}</p>
               </div>
