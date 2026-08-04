@@ -23,7 +23,6 @@ interface RoundInfo {
   number: number;
   name: string;
   subtitle: string;
-  emoji: string;
 }
 
 interface QuestionStats {
@@ -53,6 +52,7 @@ interface HostGameState {
     aiResponse: string;
   } | null;
   timeRemaining: number;
+  questionTimer: number;
   participants: Participant[];
   leaderboard: Participant[];
   stats: QuestionStats | null;
@@ -133,14 +133,12 @@ function RoundBanner({ roundInfo, currentRound }: { roundInfo: RoundInfo; curren
       className={`${colors.bg} ${colors.border} border rounded-2xl p-4 text-center`}
     >
       <div className="flex items-center justify-center gap-3">
-        <span className="text-2xl">{roundInfo.emoji}</span>
         <div>
           <p className={`text-sm font-bold uppercase tracking-wider ${colors.text}`}>
             Round {roundInfo.number} — {roundInfo.name}
           </p>
           <p className="text-xs text-gray-400">{roundInfo.subtitle}</p>
         </div>
-        <span className="text-2xl">{roundInfo.emoji}</span>
       </div>
     </motion.div>
   );
@@ -302,19 +300,16 @@ export default function HostDashboard() {
               {/* Round preview */}
               <div className="grid grid-cols-3 gap-2 mb-6">
                 <div className="bg-cyan-500/10 border border-cyan-500/20 rounded-xl p-3 text-center">
-                  <p className="text-lg">🤖</p>
                   <p className="text-xs font-bold text-cyan-400">Round 1</p>
-                  <p className="text-[10px] text-gray-500">The Machine Round</p>
+                  <p className="text-[10px] text-gray-500">Logic</p>
                 </div>
                 <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 text-center">
-                  <p className="text-lg">⚔️</p>
                   <p className="text-xs font-bold text-amber-400">Round 2</p>
-                  <p className="text-[10px] text-gray-500">The Battle Round</p>
+                  <p className="text-[10px] text-gray-500">Knowledge</p>
                 </div>
                 <div className="bg-green-500/10 border border-green-500/20 rounded-xl p-3 text-center">
-                  <p className="text-lg">🧠</p>
                   <p className="text-xs font-bold text-green-400">Round 3</p>
-                  <p className="text-[10px] text-gray-500">The Human Round</p>
+                  <p className="text-[10px] text-gray-500">Judgment</p>
                 </div>
               </div>
 
@@ -373,14 +368,6 @@ export default function HostDashboard() {
         <div className="max-w-4xl mx-auto pt-8">
           {/* Round Complete Header */}
           <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} className="text-center mb-8">
-            <motion.span
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ type: 'spring', delay: 0.2 }}
-              className="text-7xl inline-block mb-4"
-            >
-              {completedRound.emoji}
-            </motion.span>
             <h1 className={`text-4xl font-extrabold mb-2 ${rc.text}`}>
               {completedRound.name} Complete!
             </h1>
@@ -457,7 +444,6 @@ export default function HostDashboard() {
           >
             <p className="text-gray-400 mb-3">Up Next</p>
             <div className={`inline-flex items-center gap-3 px-6 py-3 rounded-2xl mb-6 ${ROUND_COLORS[nextRound.number]?.bg || 'bg-white/5'} border ${ROUND_COLORS[nextRound.number]?.border || 'border-white/10'}`}>
-              <span className="text-3xl">{nextRound.emoji}</span>
               <div className="text-left">
                 <p className={`font-bold ${ROUND_COLORS[nextRound.number]?.text || 'text-white'}`}>{nextRound.name}</p>
                 <p className="text-sm text-gray-400">{nextRound.subtitle}</p>
@@ -778,7 +764,7 @@ export default function HostDashboard() {
                 {/* RIGHT */}
                 <div className="space-y-4">
                   <div className="glass-card p-6 flex flex-col items-center">
-                    <TimerRing time={gameState.timeRemaining} total={15} />
+                    <TimerRing time={gameState.timeRemaining} total={gameState.questionTimer || 15} />
                     <p className="text-sm text-gray-400 mt-2">Time Remaining</p>
                   </div>
 

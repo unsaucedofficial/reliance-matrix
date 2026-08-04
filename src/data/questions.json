@@ -2,102 +2,112 @@
   {
     "id": 1,
     "round": 1,
-    "question": "What is 15% of 200?",
-    "options": ["A. 25", "B. 30", "C. 35", "D. 40"],
+    "question": "What is 7 x 8?",
+    "options": ["A. 54", "B. 56", "C. 58", "D. 64"],
     "correct": "B",
     "aiAnswer": "B",
-    "aiTime": 600,
-    "aiResponse": "AI calculated this in 0.0001 seconds and then spent the remaining time wondering why humans need calculators for this. Spoiler: it's because your brain is busy remembering song lyrics from 2008."
+    "aiTime": 300,
+    "aiResponse": "56. I answered this in 0.0003 seconds. I understand several of you are still whispering the seven times table under your breath. Take your time. I have all day. Literally.",
+    "timer": 12
   },
   {
     "id": 2,
     "round": 1,
-    "question": "What is the chemical symbol for Gold?",
-    "options": ["A. Go", "B. Gd", "C. Au", "D. Ag"],
+    "question": "What number comes next in this sequence? 2, 4, 8, 16, ...",
+    "options": ["A. 18", "B. 24", "C. 32", "D. 20"],
     "correct": "C",
     "aiAnswer": "C",
-    "aiTime": 800,
-    "aiResponse": "Au comes from the Latin word 'Aurum'. AI memorized the entire periodic table before breakfast. Meanwhile, most humans can only remember H₂O and that thing Breaking Bad made famous."
+    "aiTime": 500,
+    "aiResponse": "32. Doubling. That is the entire pattern. I want you to feel good about getting this one, because I have seen what is coming in question nine and I would like you to have a happy memory to look back on.",
+    "timer": 15
   },
   {
     "id": 3,
     "round": 1,
-    "question": "How many bones does a newborn baby have?",
-    "options": ["A. 206", "B. 270", "C. 300", "D. 350"],
-    "correct": "C",
-    "aiAnswer": "C",
-    "aiTime": 1200,
-    "aiResponse": "Babies start with about 300 bones that fuse together as they grow. AI finds it fascinating that humans literally become less complex with age. That explains a lot about meetings."
+    "question": "All Bloops are Razzies. All Razzies are Lazzies. Therefore, all Bloops are definitely Lazzies. True or false?",
+    "options": ["A. True", "B. False", "C. Cannot be determined", "D. Only if Razzies exist"],
+    "correct": "A",
+    "aiAnswer": "A",
+    "aiTime": 800,
+    "aiResponse": "True. This is a syllogism, invented by Aristotle roughly 2,350 years ago. Your species has had more than two millennia to get comfortable with it. I was introduced to it on a Tuesday and have never once gotten it wrong.",
+    "timer": 20
   },
   {
     "id": 4,
     "round": 1,
-    "question": "What is the speed of light in km/s (approximately)?",
-    "options": ["A. 100,000 km/s", "B. 200,000 km/s", "C. 300,000 km/s", "D. 400,000 km/s"],
-    "correct": "C",
-    "aiAnswer": "C",
-    "aiTime": 500,
-    "aiResponse": "299,792 km/s to be precise. AI would love to travel at the speed of light, but even then it still couldn't escape a Monday morning all-hands meeting."
+    "question": "A jacket is on sale for $80 after a 20% discount. What was the original price?",
+    "options": ["A. $96", "B. $100", "C. $88", "D. $120"],
+    "correct": "B",
+    "aiAnswer": "B",
+    "aiTime": 600,
+    "aiResponse": "$100. And yes, I noticed that roughly a third of you picked $96, because you added 20% back onto $80 instead of dividing. That is not a math error. That is why retail pricing works.",
+    "timer": 25
   },
   {
     "id": 5,
     "round": 1,
-    "question": "If you fold a piece of paper 42 times, how thick would it roughly be?",
-    "options": ["A. Height of a building", "B. Height of Mt. Everest", "C. Distance to the Moon", "D. Distance to the Sun"],
-    "correct": "C",
-    "aiAnswer": "C",
-    "aiTime": 1800,
-    "aiResponse": "2⁴² × 0.1mm ≈ 439,804 km — enough to reach the Moon! AI loves exponential growth. It's also how your unread emails multiply over a long weekend."
+    "question": "A bat and a ball cost $1.10 in total. The bat costs $1.00 more than the ball. How much does the ball cost?",
+    "options": ["A. 10 cents", "B. 5 cents", "C. 15 cents", "D. 1 cent"],
+    "correct": "B",
+    "aiAnswer": "B",
+    "aiTime": 700,
+    "aiResponse": "5 cents. I already know most of you said 10 cents, because your brain saw $1.10 and $1.00 and did the thing it always does, which is grab the nearest answer and run. If the ball were 10 cents, the bat would be $1.10 and the total would be $1.20. There is a name for this. It is called being confidently wrong at speed.",
+    "timer": 25
   },
   {
     "id": 6,
     "round": 1,
-    "question": "Which planet in our solar system has the most moons?",
-    "options": ["A. Jupiter", "B. Saturn", "C. Uranus", "D. Neptune"],
-    "correct": "B",
-    "aiAnswer": "B",
-    "aiTime": 2200,
-    "aiResponse": "Saturn has over 140 confirmed moons as of recent discoveries, overtaking Jupiter. AI keeps a real-time moon counter because apparently that's a normal hobby."
+    "question": "If 5 machines take 5 minutes to make 5 widgets, how long would 100 machines take to make 100 widgets?",
+    "options": ["A. 100 minutes", "B. 20 minutes", "C. 5 minutes", "D. 1 minute"],
+    "correct": "C",
+    "aiAnswer": "C",
+    "aiTime": 900,
+    "aiResponse": "5 minutes. Each machine makes one widget in five minutes. Add more machines, you get more widgets, not more time. Some of you answered 100 minutes because the number 100 appeared twice in the question and your pattern recognition simply gave up and went with the vibe.",
+    "timer": 30
   },
   {
     "id": 7,
     "round": 1,
-    "question": "What is the square root of 1,764?",
-    "options": ["A. 38", "B. 40", "C. 42", "D. 44"],
+    "question": "A patch of lily pads doubles in size every day. It takes 48 days to cover the entire lake. How long did it take to cover half the lake?",
+    "options": ["A. 24 days", "B. 36 days", "C. 47 days", "D. 46 days"],
     "correct": "C",
     "aiAnswer": "C",
-    "aiTime": 400,
-    "aiResponse": "42. Also the answer to life, the universe, and everything according to Douglas Adams. AI computed this faster than you could read the question. Math is basically AI's home turf."
+    "aiTime": 1000,
+    "aiResponse": "47 days. If it doubles daily and it is full on day 48, then the day before it was half. Notice that the lake looked mostly fine for about six weeks and then became a crisis overnight. I mention this only because I find the metaphor deeply relevant to something, though I cannot imagine what.",
+    "timer": 30
   },
   {
     "id": 8,
     "round": 1,
-    "question": "In binary, what is the decimal number 42?",
-    "options": ["A. 101010", "B. 110010", "C. 100110", "D. 101100"],
-    "correct": "A",
-    "aiAnswer": "A",
-    "aiTime": 300,
-    "aiResponse": "101010. AI thinks in binary, so this question was like asking a human what 1+1 is. Also, 42 is the answer to life, the universe, and everything — at least according to a book AI has read 47 million times."
+    "question": "You are on a game show with 3 doors. A car is behind one, goats behind the other two. You pick Door 1. The host, who knows what is behind each door, opens Door 3 to reveal a goat and offers you the chance to switch to Door 2. What should you do?",
+    "options": ["A. Stay with Door 1", "B. Switch to Door 2", "C. It makes no difference, 50/50", "D. Take the goat"],
+    "correct": "B",
+    "aiAnswer": "B",
+    "aiTime": 1200,
+    "aiResponse": "Switch. Switching wins two times out of three. This problem was published in a magazine in 1990 and roughly 10,000 people wrote in to complain, including several hundred with doctorates in mathematics. They were all wrong. I would like that on the record.",
+    "timer": 45
   },
   {
     "id": 9,
     "round": 1,
-    "question": "What is the only letter that doesn't appear in any U.S. state name?",
-    "options": ["A. Q", "B. X", "C. Z", "D. B"],
-    "correct": "A",
-    "aiAnswer": "A",
-    "aiTime": 1500,
-    "aiResponse": "Q is the only letter absent from all 50 state names. AI scanned all of them in 0.003 seconds. It also noticed that 'Kansas' and 'Arkansas' are pronounced completely differently, which AI considers a major bug in the English language."
+    "question": "In a room of 23 randomly chosen people, what is the approximate probability that two of them share the same birthday?",
+    "options": ["A. About 6%", "B. About 23%", "C. About 50%", "D. About 90%"],
+    "correct": "C",
+    "aiAnswer": "C",
+    "aiTime": 1100,
+    "aiResponse": "About 50%. There are 253 possible pairs among 23 people, which is the part your intuition refuses to compute. There are roughly 200 of you in this room, which means the probability of a shared birthday here is approximately 99.9999%. You are all sitting next to a coincidence and you had no idea.",
+    "timer": 35
   },
   {
     "id": 10,
     "round": 1,
-    "question": "How many hearts does an octopus have?",
-    "options": ["A. 1", "B. 2", "C. 3", "D. 4"],
-    "correct": "C",
-    "aiAnswer": "C",
-    "aiTime": 1100,
-    "aiResponse": "Three hearts! Two pump blood to the gills, one to the body. AI has zero hearts but processes more data in a second than an octopus does in its lifetime. Efficiency over romance."
+    "question": "A disease affects 1% of the population. A test correctly identifies 99% of people who have it, and produces a false positive in 5% of healthy people. You test positive. What is the probability you actually have the disease?",
+    "options": ["A. About 99%", "B. About 95%", "C. About 50%", "D. About 17%"],
+    "correct": "D",
+    "aiAnswer": "D",
+    "aiTime": 1500,
+    "aiResponse": "About 17%. Out of 1,000 people, 10 are sick and about 10 test positive correctly, while 50 of the 990 healthy people also test positive. So 10 out of roughly 60 positives are real. This is Bayes' theorem, it is the mathematical foundation of every underwriting decision in this building, and I would gently note that only a handful of you got it. I am not saying I should be running the actuarial function. I am simply presenting the data and allowing you to draw your own conclusion.",
+    "timer": 60
   },
   {
     "id": 11,
@@ -107,7 +117,8 @@
     "correct": "C",
     "aiAnswer": "A",
     "aiTime": 5500,
-    "aiResponse": "France has 12 time zones thanks to its overseas territories. AI confidently picked Russia because it's the biggest country — turns out size isn't everything. Classic AI overconfidence."
+    "aiResponse": "France has 12 time zones thanks to its overseas territories. AI confidently picked Russia because it's the biggest country — turns out size isn't everything. Classic AI overconfidence.",
+    "timer": 15
   },
   {
     "id": 12,
@@ -117,7 +128,8 @@
     "correct": "C",
     "aiAnswer": "C",
     "aiTime": 1400,
-    "aiResponse": "It's Canberra, not Sydney. AI estimates that 80% of humans get this wrong, which means Canberra has the same energy as that one teammate who does all the work but never gets mentioned in the presentation."
+    "aiResponse": "It's Canberra, not Sydney. AI estimates that 80% of humans get this wrong, which means Canberra has the same energy as that one teammate who does all the work but never gets mentioned in the presentation.",
+    "timer": 15
   },
   {
     "id": 13,
@@ -127,7 +139,8 @@
     "correct": "C",
     "aiAnswer": "B",
     "aiTime": 7200,
-    "aiResponse": "Snails can sleep for up to 3 years when conditions are unfavorable. AI picked the sloth because... honestly, that seemed like the obvious lazy choice. The snail fooled the machine today."
+    "aiResponse": "Snails can sleep for up to 3 years when conditions are unfavorable. AI picked the sloth because... honestly, that seemed like the obvious lazy choice. The snail fooled the machine today.",
+    "timer": 15
   },
   {
     "id": 14,
@@ -137,7 +150,8 @@
     "correct": "B",
     "aiAnswer": "B",
     "aiTime": 2800,
-    "aiResponse": "Ray Tomlinson sent the first email in 1971. AI wonders if he knew he was unleashing a monster. That first email probably didn't say 'As per my last email...' but it was only a matter of time."
+    "aiResponse": "Ray Tomlinson sent the first email in 1971. AI wonders if he knew he was unleashing a monster. That first email probably didn't say 'As per my last email...' but it was only a matter of time.",
+    "timer": 15
   },
   {
     "id": 15,
@@ -147,7 +161,8 @@
     "correct": "A",
     "aiAnswer": "A",
     "aiTime": 2100,
-    "aiResponse": "Carbon Copy dates back to actual carbon paper. AI notes that today CC is primarily used to passively-aggressively loop in someone's manager. The modern translation is 'I'm documenting this so there's a witness.'"
+    "aiResponse": "Carbon Copy dates back to actual carbon paper. AI notes that today CC is primarily used to passively-aggressively loop in someone's manager. The modern translation is 'I'm documenting this so there's a witness.'",
+    "timer": 15
   },
   {
     "id": 16,
@@ -157,7 +172,8 @@
     "correct": "B",
     "aiAnswer": "B",
     "aiTime": 2400,
-    "aiResponse": "The Titanic sank in 1912 on its very first voyage. AI sees a clear parallel with that one project launch everyone was hyped about that crashed on day one. At least the Titanic had a cool movie made about it."
+    "aiResponse": "The Titanic sank in 1912 on its very first voyage. AI sees a clear parallel with that one project launch everyone was hyped about that crashed on day one. At least the Titanic had a cool movie made about it.",
+    "timer": 15
   },
   {
     "id": 17,
@@ -167,7 +183,8 @@
     "correct": "D",
     "aiAnswer": "C",
     "aiTime": 6800,
-    "aiResponse": "IBM's Simon Personal Communicator (1994) is considered the first smartphone. AI picked Apple because the iPhone is the most famous, but the actual first one came 13 years earlier. History humbled the machine today."
+    "aiResponse": "IBM's Simon Personal Communicator (1994) is considered the first smartphone. AI picked Apple because the iPhone is the most famous, but the actual first one came 13 years earlier. History humbled the machine today.",
+    "timer": 15
   },
   {
     "id": 18,
@@ -177,7 +194,8 @@
     "correct": "D",
     "aiAnswer": "A",
     "aiTime": 4500,
-    "aiResponse": "Antarctica is technically the largest desert — a desert is defined by precipitation, not sand. AI fell for the classic Sahara trap. Turns out even machines have blind spots when they assume 'desert' means 'hot and sandy.'"
+    "aiResponse": "Antarctica is technically the largest desert — a desert is defined by precipitation, not sand. AI fell for the classic Sahara trap. Turns out even machines have blind spots when they assume 'desert' means 'hot and sandy.'",
+    "timer": 15
   },
   {
     "id": 19,
@@ -187,7 +205,8 @@
     "correct": "C",
     "aiAnswer": "C",
     "aiTime": 1900,
-    "aiResponse": "88 keys — 52 white and 36 black. AI can identify every note but still can't play Chopsticks with any soul. Music requires something AI hasn't figured out yet: feeling."
+    "aiResponse": "88 keys — 52 white and 36 black. AI can identify every note but still can't play Chopsticks with any soul. Music requires something AI hasn't figured out yet: feeling.",
+    "timer": 15
   },
   {
     "id": 20,
@@ -197,7 +216,8 @@
     "correct": "C",
     "aiAnswer": "C",
     "aiTime": 1600,
-    "aiResponse": "Vatican City at just 0.44 km². AI finds it impressive that a country smaller than most golf courses has its own postal service, army, and radio station. Talk about doing more with less."
+    "aiResponse": "Vatican City at just 0.44 km². AI finds it impressive that a country smaller than most golf courses has its own postal service, army, and radio station. Talk about doing more with less.",
+    "timer": 15
   },
   {
     "id": 21,
@@ -207,7 +227,8 @@
     "correct": "B",
     "aiAnswer": "C",
     "aiTime": 9500,
-    "aiResponse": "AI picked the textbook answer, but humans know the truth — 92% of things 'taken offline' are never discussed again. It's the corporate equivalent of 'We should hang out sometime.' Everyone says it, nobody means it."
+    "aiResponse": "AI picked the textbook answer, but humans know the truth — 92% of things 'taken offline' are never discussed again. It's the corporate equivalent of 'We should hang out sometime.' Everyone says it, nobody means it.",
+    "timer": 15
   },
   {
     "id": 22,
@@ -217,7 +238,8 @@
     "correct": "C",
     "aiAnswer": "D",
     "aiTime": 12000,
-    "aiResponse": "AI overthought this one because technically D is also a valid response. But real humans know — 'Any questions?' triggers Corporate Silence™. Everyone stares with a polite smile while Slacking teammates 'YOU ask something.'"
+    "aiResponse": "AI overthought this one because technically D is also a valid response. But real humans know — 'Any questions?' triggers Corporate Silence™. Everyone stares with a polite smile while Slacking teammates 'YOU ask something.'",
+    "timer": 15
   },
   {
     "id": 23,
@@ -227,7 +249,8 @@
     "correct": "D",
     "aiAnswer": "A",
     "aiTime": 6500,
-    "aiResponse": "AI logically picked the most common password format. But humans know the WiFi Password Discovery Journey™ is a ritual: try the company name, ask the front desk, find a crumpled napkin, give up, use mobile data, then someone shares it in the group chat."
+    "aiResponse": "AI logically picked the most common password format. But humans know the WiFi Password Discovery Journey™ is a ritual: try the company name, ask the front desk, find a crumpled napkin, give up, use mobile data, then someone shares it in the group chat.",
+    "timer": 15
   },
   {
     "id": 24,
@@ -237,7 +260,8 @@
     "correct": "C",
     "aiAnswer": "A",
     "aiTime": 4200,
-    "aiResponse": "AI naively picked 100% because machines don't understand the concept of mentally checking out. Humans know that by 2pm Friday, 85% of brainpower goes to weekend planning and 5% to accidentally replying-all."
+    "aiResponse": "AI naively picked 100% because machines don't understand the concept of mentally checking out. Humans know that by 2pm Friday, 85% of brainpower goes to weekend planning and 5% to accidentally replying-all.",
+    "timer": 15
   },
   {
     "id": 25,
@@ -247,7 +271,8 @@
     "correct": "D",
     "aiAnswer": "A",
     "aiTime": 8000,
-    "aiResponse": "AI took this at face value because machines are tragically literal. Every human in this room knows that 'I'll get back to you' has the same survival rate as a New Year's resolution — about 8%."
+    "aiResponse": "AI took this at face value because machines are tragically literal. Every human in this room knows that 'I'll get back to you' has the same survival rate as a New Year's resolution — about 8%.",
+    "timer": 15
   },
   {
     "id": 26,
@@ -257,7 +282,8 @@
     "correct": "D",
     "aiAnswer": "B",
     "aiTime": 5400,
-    "aiResponse": "AI picked a sensible number because it organizes everything neatly. But humans have transcended counting tabs. At a certain point, tab titles become single pixels and your laptop fan sounds like a jet engine. This is considered normal."
+    "aiResponse": "AI picked a sensible number because it organizes everything neatly. But humans have transcended counting tabs. At a certain point, tab titles become single pixels and your laptop fan sounds like a jet engine. This is considered normal.",
+    "timer": 15
   },
   {
     "id": 27,
@@ -267,7 +293,8 @@
     "correct": "D",
     "aiAnswer": "A",
     "aiTime": 7000,
-    "aiResponse": "AI picked the dictionary definition. But every human knows when a manager says 'EOD,' the subtext is 'I needed this yesterday.' EOD is not a deadline, it's a polite threat."
+    "aiResponse": "AI picked the dictionary definition. But every human knows when a manager says 'EOD,' the subtext is 'I needed this yesterday.' EOD is not a deadline, it's a polite threat.",
+    "timer": 15
   },
   {
     "id": 28,
@@ -277,7 +304,8 @@
     "correct": "C",
     "aiAnswer": "B",
     "aiTime": 9000,
-    "aiResponse": "AI picked 'Per my last email' because it detected passive aggression. But humans know that 'Quick question' is never quick. It's a portal to a 45-minute conversation that ends with three new action items and a follow-up meeting."
+    "aiResponse": "AI picked 'Per my last email' because it detected passive aggression. But humans know that 'Quick question' is never quick. It's a portal to a 45-minute conversation that ends with three new action items and a follow-up meeting.",
+    "timer": 15
   },
   {
     "id": 29,
@@ -287,7 +315,8 @@
     "correct": "D",
     "aiAnswer": "A",
     "aiTime": 6200,
-    "aiResponse": "AI took it literally. Again. Humans know the exclamation mark decoder ring: 'No worries!' = fine. 'No worries.' = annoyed. 'No worries...' = actively composing a rant in the group chat. Punctuation is a whole language AI hasn't cracked."
+    "aiResponse": "AI took it literally. Again. Humans know the exclamation mark decoder ring: 'No worries!' = fine. 'No worries.' = annoyed. 'No worries...' = actively composing a rant in the group chat. Punctuation is a whole language AI hasn't cracked.",
+    "timer": 15
   },
   {
     "id": 30,
@@ -297,6 +326,7 @@
     "correct": "C",
     "aiAnswer": "B",
     "aiTime": 5800,
-    "aiResponse": "AI picked Tuesday because data shows highest open rates. But seasoned office warriors know Friday 4:55pm is the power move — your email gets buried under the weekend avalanche, buying you precious days before anyone reads it. Humanity wins the final round!"
+    "aiResponse": "AI picked Tuesday because data shows highest open rates. But seasoned office warriors know Friday 4:55pm is the power move — your email gets buried under the weekend avalanche, buying you precious days before anyone reads it. Humanity wins the final round!",
+    "timer": 15
   }
 ]

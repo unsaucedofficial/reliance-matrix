@@ -10,7 +10,6 @@ interface RoundInfo {
   number: number;
   name: string;
   subtitle: string;
-  emoji: string;
 }
 
 interface LeaderboardEntry {
@@ -42,6 +41,7 @@ interface GameState {
     options: string[];
   } | null;
   timeRemaining: number;
+  questionTimer: number;
   sessionCode: string;
   leaderboard: LeaderboardEntry[];
   totalPlayers: number;
@@ -269,16 +269,13 @@ export default function ParticipantPage() {
           {/* Round preview */}
           <div className="grid grid-cols-3 gap-2 mb-6">
             <div className="bg-cyan-500/10 rounded-xl p-2 text-center">
-              <p className="text-sm">🤖</p>
-              <p className="text-[10px] text-cyan-400 font-bold">R1: Machine</p>
+              <p className="text-[10px] text-cyan-400 font-bold">R1: Logic</p>
             </div>
             <div className="bg-amber-500/10 rounded-xl p-2 text-center">
-              <p className="text-sm">⚔️</p>
-              <p className="text-[10px] text-amber-400 font-bold">R2: Battle</p>
+              <p className="text-[10px] text-amber-400 font-bold">R2: Knowledge</p>
             </div>
             <div className="bg-green-500/10 rounded-xl p-2 text-center">
-              <p className="text-sm">🧠</p>
-              <p className="text-[10px] text-green-400 font-bold">R3: Human</p>
+              <p className="text-[10px] text-green-400 font-bold">R3: Judgment</p>
             </div>
           </div>
 
@@ -311,14 +308,6 @@ export default function ParticipantPage() {
         <div className="max-w-md mx-auto pt-8 space-y-5">
           {/* Round Complete Header */}
           <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} className="text-center">
-            <motion.span
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ type: 'spring', delay: 0.2 }}
-              className="text-6xl inline-block mb-3"
-            >
-              {completedRound.emoji}
-            </motion.span>
             <h1 className={`text-3xl font-extrabold mb-1 ${rc.text}`}>
               {completedRound.name} Complete!
             </h1>
@@ -402,7 +391,6 @@ export default function ParticipantPage() {
           >
             <p className="text-gray-400 text-sm mb-2">Up Next</p>
             <div className={`inline-flex items-center gap-2 px-5 py-3 rounded-2xl ${ROUND_COLORS[nextRound.number]?.bg || 'bg-white/5'}`}>
-              <span className="text-2xl">{nextRound.emoji}</span>
               <div className="text-left">
                 <p className={`font-bold text-sm ${ROUND_COLORS[nextRound.number]?.text || 'text-white'}`}>{nextRound.name}</p>
                 <p className="text-xs text-gray-400">{nextRound.subtitle}</p>
@@ -510,12 +498,12 @@ export default function ParticipantPage() {
             Q{gameState.currentQuestionIndex + 1}/{gameState.totalQuestions}
           </span>
           <span className={`text-xs font-bold px-3 py-1 rounded-full ${roundColor.bg} ${roundColor.text}`}>
-            {roundInfo?.emoji} R{currentRound}: {roundInfo?.name}
+            R{currentRound}: {roundInfo?.name}
           </span>
         </div>
 
         {gameState.status === 'active' && !answerSubmitted && (
-          <CountdownRing time={gameState.timeRemaining} total={15} />
+          <CountdownRing time={gameState.timeRemaining} total={gameState.questionTimer || 15} />
         )}
 
         {gameState.status === 'paused' && (

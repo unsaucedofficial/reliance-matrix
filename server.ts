@@ -22,6 +22,7 @@ interface Question {
   aiAnswer: string;
   aiTime: number;
   aiResponse: string;
+  timer: number;
 }
 
 interface Participant {
@@ -48,9 +49,9 @@ interface GameState {
 
 // ── Round definitions ─────────────────────────────────
 const ROUNDS = [
-  { number: 1, name: 'The Machine Round', subtitle: 'Can you keep up with AI?', emoji: '🤖' },
-  { number: 2, name: 'The Battle Round', subtitle: 'Human vs Machine — who knows more?', emoji: '⚔️' },
-  { number: 3, name: 'The Human Round', subtitle: 'Time for humans to shine!', emoji: '🧠' },
+  { number: 1, name: 'Logic', subtitle: 'Logic' },
+  { number: 2, name: 'Knowledge', subtitle: 'Knowledge' },
+  { number: 3, name: 'Judgment', subtitle: 'Judgment' },
 ];
 
 function getRoundInfo(questionIndex: number, questions: Question[]) {
@@ -64,8 +65,13 @@ const questionsPath = path.join(__dirname, 'src', 'data', 'questions.json');
 const questions: Question[] = JSON.parse(fs.readFileSync(questionsPath, 'utf-8'));
 
 // ── Constants ──────────────────────────────────────────
-const QUESTION_TIME = 15;
+const DEFAULT_QUESTION_TIME = 15;
 const AI_PARTICIPANT_ID = '__AI_PLAYER__';
+
+function getQuestionTime(questionIndex: number): number {
+  const q = questions[questionIndex];
+  return q?.timer || DEFAULT_QUESTION_TIME;
+}
 
 function generateSessionCode(): string {
   return Math.random().toString(36).substring(2, 8).toUpperCase();
@@ -76,7 +82,7 @@ const gameState: GameState = {
   status: 'waiting',
   currentQuestionIndex: -1,
   questionStartTime: null,
-  timeRemaining: QUESTION_TIME,
+  timeRemaining: DEFAULT_QUESTION_TIME,
   participants: new Map(),
   answers: new Map(),
   sessionCode: generateSessionCode(),
@@ -128,7 +134,8 @@ function scheduleAIAnswer(io: SocketIOServer) {
     gameState.answers.set(AI_PARTICIPANT_ID, { answer: aiAnswer, time: aiTime });
 
     if (aiAnswer === currentQ.correct) {
-      const timeBonus = Math.max(0, Math.round(500 * (1 - aiTime / (QUESTION_TIME * 1000))));
+      const qTime = getQuestionTime(gameState.currentQuestionIndex);
+      const timeBonus = Math.max(0, Math.round(500 * (1 - aiTime / (qTime * 1000))));
       aiPlayer.score += 1000 + timeBonus;
       aiPlayer.correctCount++;
     }
@@ -211,12 +218,15 @@ function broadcastGameState(io: SocketIOServer) {
   const prevQ = gameState.currentQuestionIndex > 0 ? questions[gameState.currentQuestionIndex - 1] : null;
   const isNewRound = currentQ && (!prevQ || prevQ.round !== currentQ.round);
 
+  const questionTimer = getQuestionTime(gameState.currentQuestionIndex);
+
   io.to('host').emit('gameState', {
     status: gameState.status,
     currentQuestionIndex: gameState.currentQuestionIndex,
     totalQuestions: questions.length,
     currentQuestion: currentQ || null,
     timeRemaining: gameState.timeRemaining,
+    questionTimer,
     participants: getParticipantsList(),
     leaderboard: getLeaderboard(),
     stats: getQuestionStats(),
@@ -237,6 +247,7 @@ function broadcastGameState(io: SocketIOServer) {
       options: currentQ.options,
     } : null,
     timeRemaining: gameState.timeRemaining,
+    questionTimer,
     sessionCode: gameState.sessionCode,
     leaderboard: getLeaderboard().slice(0, 10),
     totalPlayers: getHumanParticipants().length,
@@ -249,7 +260,7 @@ function broadcastGameState(io: SocketIOServer) {
 
 function startTimer(io: SocketIOServer) {
   if (timerInterval) clearInterval(timerInterval);
-  gameState.timeRemaining = QUESTION_TIME;
+  gameState.timeRemaining = getQuestionTime(gameState.currentQuestionIndex);
   gameState.questionStartTime = Date.now();
 
   scheduleAIAnswer(io);
@@ -282,7 +293,7 @@ function resetGame() {
   gameState.status = 'waiting';
   gameState.currentQuestionIndex = -1;
   gameState.questionStartTime = null;
-  gameState.timeRemaining = QUESTION_TIME;
+  gameState.timeRemaining = DEFAULT_QUESTION_TIME;
   gameState.answers.clear();
   gameState.sessionCode = generateSessionCode();
   for (const [, p] of gameState.participants) {
@@ -385,7 +396,8 @@ app.prepare().then(() => {
         aiPlayer.answeredCount++;
         gameState.answers.set(AI_PARTICIPANT_ID, { answer: currentQ.aiAnswer, time: aiPlayer.currentTime });
         if (currentQ.aiAnswer === currentQ.correct) {
-          const timeBonus = Math.max(0, Math.round(500 * (1 - aiPlayer.currentTime / (QUESTION_TIME * 1000))));
+          const qTime = getQuestionTime(gameState.currentQuestionIndex);
+          const timeBonus = Math.max(0, Math.round(500 * (1 - aiPlayer.currentTime / (qTime * 1000))));
           aiPlayer.score += 1000 + timeBonus;
           aiPlayer.correctCount++;
         }
@@ -477,7 +489,8 @@ app.prepare().then(() => {
 
       const currentQ = questions[gameState.currentQuestionIndex];
       if (currentQ && data.answer === currentQ.correct) {
-        const timeBonus = Math.max(0, Math.round(500 * (1 - timeTaken / (QUESTION_TIME * 1000))));
+        const qTime = getQuestionTime(gameState.currentQuestionIndex);
+        const timeBonus = Math.max(0, Math.round(500 * (1 - timeTaken / (qTime * 1000))));
         participant.score += 1000 + timeBonus;
         participant.correctCount++;
       }
