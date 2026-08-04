@@ -192,6 +192,11 @@ export default function HostDashboard() {
   const [showAnswer, setShowAnswer] = useState(false);
   const [tab, setTab] = useState<'dashboard' | 'leaderboard'>('dashboard');
   const [windowSize, setWindowSize] = useState({ w: 1200, h: 800 });
+  const [roundComplete, setRoundComplete] = useState<{
+    completedRound: RoundInfo;
+    leaderboard: Participant[];
+    nextRound: RoundInfo;
+  } | null>(null);
 
   useEffect(() => {
     setWindowSize({ w: window.innerWidth, h: window.innerHeight });
@@ -224,10 +229,15 @@ export default function HostDashboard() {
       setTimeout(() => setShowConfetti(false), 5000);
     });
 
+    socket.on('roundComplete', (data: { completedRound: RoundInfo; leaderboard: Participant[]; nextRound: RoundInfo }) => {
+      setRoundComplete(data);
+    });
+
     return () => {
       socket.off('gameState');
       socket.off('timer');
       socket.off('answerRevealed');
+      socket.off('roundComplete');
     };
   }, []);
 
@@ -349,6 +359,128 @@ export default function HostDashboard() {
     );
   }
 
+  // ── ROUND COMPLETE ──
+  if (gameState.status === 'round_complete' && roundComplete) {
+    const { completedRound, leaderboard, nextRound } = roundComplete;
+    const rc = ROUND_COLORS[completedRound.number] || ROUND_COLORS[1];
+    const aiInBoard = leaderboard.find(p => p.isAI);
+    const humansInBoard = leaderboard.filter(p => !p.isAI);
+    const humansBeatAI = aiInBoard ? humansInBoard.filter(p => p.score > aiInBoard.score).length : 0;
+
+    return (
+      <div className="min-h-screen p-6">
+        <ReactConfetti width={windowSize.w} height={windowSize.h} recycle={false} numberOfPieces={200} />
+        <div className="max-w-4xl mx-auto pt-8">
+          {/* Round Complete Header */}
+          <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} className="text-center mb-8">
+            <motion.span
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: 'spring', delay: 0.2 }}
+              className="text-7xl inline-block mb-4"
+            >
+              {completedRound.emoji}
+            </motion.span>
+            <h1 className={`text-4xl font-extrabold mb-2 ${rc.text}`}>
+              {completedRound.name} Complete!
+            </h1>
+            <p className="text-gray-400 text-lg">{completedRound.subtitle}</p>
+          </motion.div>
+
+          {/* AI vs Humans Summary */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className={`glass-card p-6 mb-6 border ${rc.border}`}
+          >
+            <div className="grid grid-cols-2 gap-6 text-center">
+              <div className="rounded-xl p-4 bg-cyan-500/10">
+                <p className="text-3xl mb-1">🤖</p>
+                <p className="text-sm text-gray-400">AI Score</p>
+                <p className="text-3xl font-extrabold text-cyan-400">{aiInBoard?.score || 0}</p>
+                <p className="text-xs text-gray-500">{aiInBoard?.correctCount || 0} correct</p>
+              </div>
+              <div className="rounded-xl p-4 bg-green-500/10">
+                <p className="text-3xl mb-1">🧠</p>
+                <p className="text-sm text-gray-400">Top Human</p>
+                <p className="text-3xl font-extrabold text-green-400">
+                  {humansInBoard.length > 0 ? Math.max(...humansInBoard.map(p => p.score)) : 0}
+                </p>
+                <p className="text-xs text-gray-500">{humansBeatAI} beating AI</p>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Leaderboard */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="glass-card p-6 mb-8"
+          >
+            <h2 className="text-xl font-bold mb-4 text-center">Leaderboard after Round {completedRound.number}</h2>
+            <div className="space-y-2 max-h-[400px] overflow-y-auto">
+              {leaderboard.map((p, i) => (
+                <motion.div
+                  key={p.name}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.5 + i * 0.05 }}
+                  className={`flex items-center gap-3 p-3 rounded-xl ${
+                    p.isAI ? 'bg-cyan-500/10 border border-cyan-500/20' : 'bg-white/5'
+                  } ${i < 3 ? 'ring-1 ring-white/10' : ''}`}
+                >
+                  <span className="w-8 text-center text-lg font-bold text-gray-400">
+                    {i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `#${i + 1}`}
+                  </span>
+                  <div className="flex-1 min-w-0">
+                    <p className={`font-semibold truncate ${p.isAI ? 'text-cyan-400' : ''}`}>
+                      {p.isAI ? '🤖 ' : ''}{p.name}
+                    </p>
+                    <p className="text-xs text-gray-400">{p.correctCount} correct</p>
+                  </div>
+                  <span className={`text-xl font-bold ${p.isAI ? 'text-cyan-400' : 'text-brand-400'}`}>
+                    {p.score}
+                  </span>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Next Round Preview + Start Button */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8 }}
+            className="text-center"
+          >
+            <p className="text-gray-400 mb-3">Up Next</p>
+            <div className={`inline-flex items-center gap-3 px-6 py-3 rounded-2xl mb-6 ${ROUND_COLORS[nextRound.number]?.bg || 'bg-white/5'} border ${ROUND_COLORS[nextRound.number]?.border || 'border-white/10'}`}>
+              <span className="text-3xl">{nextRound.emoji}</span>
+              <div className="text-left">
+                <p className={`font-bold ${ROUND_COLORS[nextRound.number]?.text || 'text-white'}`}>{nextRound.name}</p>
+                <p className="text-sm text-gray-400">{nextRound.subtitle}</p>
+              </div>
+            </div>
+            <br />
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => {
+                setRoundComplete(null);
+                getSocket().emit('host:startNextRound');
+              }}
+              className="px-10 py-4 rounded-2xl bg-gradient-to-r from-brand-500 to-brand-700 text-white text-xl font-bold shadow-lg shadow-brand-500/30 hover:shadow-brand-500/50 transition-all"
+            >
+              Start {nextRound.name} →
+            </motion.button>
+          </motion.div>
+        </div>
+      </div>
+    );
+  }
+
   // ── QUIZ ENDED ──
   if (gameState.status === 'ended') {
     const aiRank = gameState.leaderboard.findIndex(p => p.isAI) + 1;
@@ -379,7 +511,7 @@ export default function HostDashboard() {
                 : <span className="text-green-400">🧠 Humanity Wins! You ARE smarter than AI!</span>
               }
             </h2>
-            <p className="text-gray-400 text-sm mb-6">3 Rounds. 20 Questions. One winner.</p>
+            <p className="text-gray-400 text-sm mb-6">3 Rounds. 30 Questions. One winner.</p>
             <div className="grid grid-cols-2 gap-6 max-w-md mx-auto">
               <div className={`rounded-2xl p-5 ${aiRank === 1 ? 'bg-cyan-500/15 ring-2 ring-cyan-500/40' : 'bg-white/5'}`}>
                 <p className="text-4xl mb-2">🤖</p>

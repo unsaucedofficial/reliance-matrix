@@ -37,7 +37,7 @@ interface Participant {
 }
 
 interface GameState {
-  status: 'waiting' | 'active' | 'paused' | 'showing_answer' | 'ended';
+  status: 'waiting' | 'active' | 'paused' | 'showing_answer' | 'round_complete' | 'ended';
   currentQuestionIndex: number;
   questionStartTime: number | null;
   timeRemaining: number;
@@ -329,6 +329,36 @@ app.prepare().then(() => {
     });
 
     socket.on('host:nextQuestion', () => {
+      if (gameState.currentQuestionIndex < questions.length - 1) {
+        const currentQ = questions[gameState.currentQuestionIndex];
+        const nextQ = questions[gameState.currentQuestionIndex + 1];
+
+        // If next question is in a different round, show round complete screen
+        if (currentQ && nextQ && currentQ.round !== nextQ.round) {
+          gameState.status = 'round_complete';
+          const completedRound = ROUNDS.find(r => r.number === currentQ.round) || ROUNDS[0];
+          io.emit('roundComplete', {
+            completedRound,
+            leaderboard: getLeaderboard(),
+            nextRound: ROUNDS.find(r => r.number === nextQ.round) || ROUNDS[1],
+          });
+          broadcastGameState(io);
+          return;
+        }
+
+        gameState.currentQuestionIndex++;
+        gameState.status = 'active';
+        gameState.answers.clear();
+        for (const [, p] of gameState.participants) {
+          p.currentAnswer = null;
+          p.currentTime = null;
+        }
+        startTimer(io);
+        broadcastGameState(io);
+      }
+    });
+
+    socket.on('host:startNextRound', () => {
       if (gameState.currentQuestionIndex < questions.length - 1) {
         gameState.currentQuestionIndex++;
         gameState.status = 'active';
