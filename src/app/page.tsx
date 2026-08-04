@@ -6,6 +6,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import ReactConfetti from 'react-confetti';
 
 // ── Types ──
+interface RoundInfo {
+  number: number;
+  name: string;
+  subtitle: string;
+  emoji: string;
+}
+
 interface LeaderboardEntry {
   name: string;
   score: number;
@@ -39,6 +46,8 @@ interface GameState {
   leaderboard: LeaderboardEntry[];
   totalPlayers: number;
   aiPlayer: AIPlayer | null;
+  roundInfo: RoundInfo;
+  currentRound: number;
 }
 
 interface AnswerReveal {
@@ -48,14 +57,20 @@ interface AnswerReveal {
   aiTime: number;
 }
 
+const ROUND_COLORS: Record<number, { text: string; bg: string }> = {
+  1: { text: 'text-cyan-400', bg: 'bg-cyan-500/10' },
+  2: { text: 'text-amber-400', bg: 'bg-amber-500/10' },
+  3: { text: 'text-green-400', bg: 'bg-green-500/10' },
+};
+
 const loadingMessages = [
   'Warming up the quiz engine...',
-  'Sharpening pencils digitally...',
-  'Bribing the leaderboard...',
-  'Calibrating fun levels...',
-  'Loading corporate humor...',
   'Teaching AI some humility...',
-  'Preparing human vs machine battle...',
+  'Calibrating fun levels...',
+  'Loading the battle arena...',
+  'Preparing brain vs machine...',
+  'Sharpening human instincts...',
+  'Counting AI mistakes in advance...',
 ];
 
 function CountdownRing({ time, total }: { time: number; total: number }) {
@@ -195,7 +210,7 @@ export default function ParticipantPage() {
             </div>
           </div>
           <h1 className="text-2xl font-extrabold gradient-text mb-1">Strategic Offsite 2026</h1>
-          <p className="text-sm text-cyan-400 mb-8">🤖 AI vs Humanity — Quiz Challenge</p>
+          <p className="text-sm text-cyan-400 mb-8">🧠 Are You Smarter Than AI?</p>
 
           <div className="space-y-4">
             <input
@@ -215,7 +230,7 @@ export default function ParticipantPage() {
               disabled={!name.trim()}
               className="w-full py-4 rounded-2xl gradient-bg text-white font-bold text-lg disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-lg shadow-brand-500/30"
             >
-              Join the Battle
+              Challenge the AI
             </motion.button>
           </div>
 
@@ -235,19 +250,35 @@ export default function ParticipantPage() {
           className="glass-card p-8 w-full max-w-md text-center"
         >
           <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-gradient-to-br from-brand-500 to-accent-pink flex items-center justify-center">
-            <span className="text-2xl">🎯</span>
+            <span className="text-2xl">🧠</span>
           </div>
           <h2 className="text-2xl font-bold mb-2">Welcome, {displayName}!</h2>
           <p className="text-gray-400 mb-4">{loadingMsg}</p>
-          <p className="text-sm text-cyan-400 mb-6">You'll be competing against 🤖 AI!</p>
+
+          {/* Round preview */}
+          <div className="grid grid-cols-3 gap-2 mb-6">
+            <div className="bg-cyan-500/10 rounded-xl p-2 text-center">
+              <p className="text-sm">🤖</p>
+              <p className="text-[10px] text-cyan-400 font-bold">R1: Machine</p>
+            </div>
+            <div className="bg-amber-500/10 rounded-xl p-2 text-center">
+              <p className="text-sm">⚔️</p>
+              <p className="text-[10px] text-amber-400 font-bold">R2: Battle</p>
+            </div>
+            <div className="bg-green-500/10 rounded-xl p-2 text-center">
+              <p className="text-sm">🧠</p>
+              <p className="text-[10px] text-green-400 font-bold">R3: Human</p>
+            </div>
+          </div>
+
           <div className="flex items-center justify-center gap-2">
             <div className="w-2 h-2 rounded-full bg-brand-500 animate-bounce" style={{ animationDelay: '0ms' }} />
             <div className="w-2 h-2 rounded-full bg-accent-pink animate-bounce" style={{ animationDelay: '150ms' }} />
             <div className="w-2 h-2 rounded-full bg-accent-orange animate-bounce" style={{ animationDelay: '300ms' }} />
           </div>
-          <p className="text-sm text-gray-500 mt-6">Waiting for the host to start...</p>
+          <p className="text-sm text-gray-500 mt-4">Waiting for the host to start...</p>
           {gameState && (
-            <p className="text-xs text-gray-600 mt-2">{gameState.totalPlayers} human player{gameState.totalPlayers !== 1 ? 's' : ''} + 🤖 AI connected</p>
+            <p className="text-xs text-gray-600 mt-2">{gameState.totalPlayers} human{gameState.totalPlayers !== 1 ? 's' : ''} + 🤖 AI ready</p>
           )}
         </motion.div>
       </div>
@@ -272,13 +303,12 @@ export default function ParticipantPage() {
               {gameState.status === 'ended' ? 'Quiz Complete!' : 'Leaderboard'}
             </h1>
 
-            {/* Your score vs AI */}
             {me && ai && gameState.status === 'ended' && (
               <div className="glass-card p-5 mt-4 border border-cyan-500/20">
                 <p className="text-lg font-bold mb-3">
                   {iBeatingAI
-                    ? <span className="text-green-400">🎉 You beat the AI!</span>
-                    : <span className="text-cyan-400">🤖 AI is ahead... for now</span>
+                    ? <span className="text-green-400">🧠 YES! You're smarter than AI!</span>
+                    : <span className="text-cyan-400">🤖 AI wins this time...</span>
                   }
                 </p>
                 <div className="grid grid-cols-2 gap-3">
@@ -335,21 +365,27 @@ export default function ParticipantPage() {
 
   // ── ACTIVE / PAUSED / SHOWING_ANSWER ──
   const q = gameState.currentQuestion;
+  const roundInfo = gameState.roundInfo;
+  const currentRound = gameState.currentRound;
+  const roundColor = ROUND_COLORS[currentRound] || ROUND_COLORS[1];
 
   return (
     <div className="min-h-screen p-4 pb-20">
       {showConfetti && <ReactConfetti width={windowSize.w} height={windowSize.h} recycle={false} numberOfPieces={150} />}
 
-      <div className="max-w-lg mx-auto pt-4 space-y-6">
+      <div className="max-w-lg mx-auto pt-4 space-y-4">
+        {/* Round + question indicator */}
         <div className="flex items-center justify-between">
           <span className="text-sm text-gray-400 font-medium">
             Q{gameState.currentQuestionIndex + 1}/{gameState.totalQuestions}
           </span>
-          <span className="text-sm text-gray-400">{displayName}</span>
+          <span className={`text-xs font-bold px-3 py-1 rounded-full ${roundColor.bg} ${roundColor.text}`}>
+            {roundInfo?.emoji} R{currentRound}: {roundInfo?.name}
+          </span>
         </div>
 
         {gameState.status === 'active' && !answerSubmitted && (
-          <CountdownRing time={gameState.timeRemaining} total={20} />
+          <CountdownRing time={gameState.timeRemaining} total={15} />
         )}
 
         {gameState.status === 'paused' && (

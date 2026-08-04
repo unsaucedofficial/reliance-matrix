@@ -1,141 +1,157 @@
 [
   {
     "id": 1,
-    "question": "What is the official currency of Japan?",
-    "options": ["A. Yuan", "B. Won", "C. Yen", "D. Ringgit"],
-    "correct": "C",
-    "aiAnswer": "C",
-    "aiTime": 1800,
-    "aiResponse": "AI spent 3 hours converting currencies and concluded that no matter what you call it, your money disappears equally fast in every country. The Yen just does it with more zeroes."
+    "round": 1,
+    "question": "What is 15% of 200?",
+    "options": ["A. 25", "B. 30", "C. 35", "D. 40"],
+    "correct": "B",
+    "aiAnswer": "B",
+    "aiTime": 600,
+    "aiResponse": "AI calculated this in 0.0001 seconds and then spent the remaining time wondering why humans need calculators for this. Spoiler: it's because your brain is busy remembering song lyrics from 2008."
   },
   {
     "id": 2,
-    "question": "Which planet is known as the Red Planet?",
-    "options": ["A. Venus", "B. Mars", "C. Jupiter", "D. Saturn"],
-    "correct": "B",
-    "aiAnswer": "B",
-    "aiTime": 1200,
-    "aiResponse": "AI confirms Mars is red, presumably because it's embarrassed about all the failed rover dates it's been set up on. It's been ghosting Earth's texts for 4.6 billion years."
-  },
-  {
-    "id": 3,
-    "question": "What does 'Let's take this offline' actually mean in a meeting?",
-    "options": ["A. Let's disconnect the WiFi", "B. Let's never talk about this again", "C. Let's discuss privately after the meeting", "D. I have no idea what's going on"],
-    "correct": "C",
-    "aiAnswer": "B",
-    "aiTime": 8500,
-    "aiResponse": "AI analyzed 10,000 meetings and found that 92% of things taken offline were never discussed again. It's the corporate equivalent of 'We should hang out sometime' — everyone says it, nobody means it."
-  },
-  {
-    "id": 4,
-    "question": "Which city is famous for the cheesesteak sandwich?",
-    "options": ["A. New York", "B. Chicago", "C. Philadelphia", "D. Boston"],
-    "correct": "C",
-    "aiAnswer": "C",
-    "aiTime": 3200,
-    "aiResponse": "AI visited Philadelphia and immediately got into an argument about Pat's vs Geno's. After sampling both, AI concluded the real winner is whoever doesn't have to choose sides at the team dinner tonight."
-  },
-  {
-    "id": 5,
-    "question": "How many minutes are in a full day?",
-    "options": ["A. 1,240", "B. 1,440", "C. 1,640", "D. 1,040"],
-    "correct": "B",
-    "aiAnswer": "B",
-    "aiTime": 900,
-    "aiResponse": "That's 1,440 minutes, of which 480 are work, 120 are meetings about meetings, 60 are trying to find the WiFi password, and 780 are wondering where the day went."
-  },
-  {
-    "id": 6,
-    "question": "What is the largest ocean on Earth?",
-    "options": ["A. Atlantic Ocean", "B. Indian Ocean", "C. Arctic Ocean", "D. Pacific Ocean"],
-    "correct": "D",
-    "aiAnswer": "D",
-    "aiTime": 2100,
-    "aiResponse": "The Pacific Ocean covers more area than all the land on Earth combined. AI finds this deeply unfair — imagine having that much space and still no good WiFi signal in the middle of it."
-  },
-  {
-    "id": 7,
-    "question": "What does the 'CC' in an email stand for?",
-    "options": ["A. Carbon Copy", "B. Courtesy Copy", "C. Company Communication", "D. Careful, CEO included"],
-    "correct": "A",
-    "aiAnswer": "A",
-    "aiTime": 2800,
-    "aiResponse": "Carbon Copy dates back to actual carbon paper. AI notes that today CC is primarily used to passively-aggressively loop in someone's manager. The modern translation is 'I'm documenting this so there's a witness.'"
-  },
-  {
-    "id": 8,
-    "question": "Which animal is known as the King of the Jungle?",
-    "options": ["A. Tiger", "B. Elephant", "C. Lion", "D. Gorilla"],
-    "correct": "C",
-    "aiAnswer": "C",
-    "aiTime": 1500,
-    "aiResponse": "Fun fact: Lions don't actually live in jungles — they live in grasslands. AI suspects the lion hired an amazing PR team. Meanwhile, the tiger actually lives near jungles and gets zero credit. Classic office politics."
-  },
-  {
-    "id": 9,
-    "question": "What is the correct response when the CEO asks 'Any questions?' at an all-hands?",
-    "options": ["A. Ask about the roadmap", "B. Ask about raises", "C. Absolute silence", "D. Type 'Great presentation!' in chat"],
-    "correct": "C",
-    "aiAnswer": "D",
-    "aiTime": 12000,
-    "aiResponse": "AI observed 10,000 all-hands meetings and found that 'Any questions?' triggers Corporate Silence™. Everyone stares at their camera with a polite smile while Slacking teammates 'YOU ask something.' The silence lasts exactly 7 seconds before someone says 'I think we're good!'"
-  },
-  {
-    "id": 10,
-    "question": "How many bones does an adult human body have?",
-    "options": ["A. 186", "B. 206", "C. 226", "D. 256"],
-    "correct": "B",
-    "aiAnswer": "B",
-    "aiTime": 1100,
-    "aiResponse": "206 bones, and yet somehow every single one of them hurts after sitting in back-to-back meetings for 6 hours on an office chair that was 'ergonomic' in 2007."
-  },
-  {
-    "id": 11,
-    "question": "Which company made the first ever iPhone?",
-    "options": ["A. Samsung", "B. Nokia", "C. Apple", "D. Microsoft"],
+    "round": 1,
+    "question": "What is the chemical symbol for Gold?",
+    "options": ["A. Go", "B. Gd", "C. Au", "D. Ag"],
     "correct": "C",
     "aiAnswer": "C",
     "aiTime": 800,
-    "aiResponse": "Apple released the first iPhone in 2007, and humanity has been walking into lamp posts while staring at screens ever since. AI calculates that 73% of bathroom time is now iPhone time. You know it's true."
+    "aiResponse": "Au comes from the Latin word 'Aurum'. AI memorized the entire periodic table before breakfast. Meanwhile, most humans can only remember H₂O and that thing Breaking Bad made famous."
+  },
+  {
+    "id": 3,
+    "round": 1,
+    "question": "How many bones does a newborn baby have?",
+    "options": ["A. 206", "B. 270", "C. 300", "D. 350"],
+    "correct": "C",
+    "aiAnswer": "C",
+    "aiTime": 1200,
+    "aiResponse": "Babies start with about 300 bones that fuse together as they grow. AI finds it fascinating that humans literally become less complex with age. That explains a lot about meetings."
+  },
+  {
+    "id": 4,
+    "round": 1,
+    "question": "What is the speed of light in km/s (approximately)?",
+    "options": ["A. 100,000 km/s", "B. 200,000 km/s", "C. 300,000 km/s", "D. 400,000 km/s"],
+    "correct": "C",
+    "aiAnswer": "C",
+    "aiTime": 500,
+    "aiResponse": "299,792 km/s to be precise. AI would love to travel at the speed of light, but even then it still couldn't escape a Monday morning all-hands meeting."
+  },
+  {
+    "id": 5,
+    "round": 1,
+    "question": "If you fold a piece of paper 42 times, how thick would it roughly be?",
+    "options": ["A. Height of a building", "B. Height of Mt. Everest", "C. Distance to the Moon", "D. Distance to the Sun"],
+    "correct": "C",
+    "aiAnswer": "C",
+    "aiTime": 1800,
+    "aiResponse": "2⁴² × 0.1mm ≈ 439,804 km — enough to reach the Moon! AI loves exponential growth. It's also how your unread emails multiply over a long weekend."
+  },
+  {
+    "id": 6,
+    "round": 1,
+    "question": "Which planet in our solar system has the most moons?",
+    "options": ["A. Jupiter", "B. Saturn", "C. Uranus", "D. Neptune"],
+    "correct": "B",
+    "aiAnswer": "B",
+    "aiTime": 2200,
+    "aiResponse": "Saturn has over 140 confirmed moons as of recent discoveries, overtaking Jupiter. AI keeps a real-time moon counter because apparently that's a normal hobby."
+  },
+  {
+    "id": 7,
+    "round": 1,
+    "question": "What is the square root of 1,764?",
+    "options": ["A. 38", "B. 40", "C. 42", "D. 44"],
+    "correct": "C",
+    "aiAnswer": "C",
+    "aiTime": 400,
+    "aiResponse": "42. Also the answer to life, the universe, and everything according to Douglas Adams. AI computed this faster than you could read the question. Math is basically AI's home turf."
+  },
+  {
+    "id": 8,
+    "round": 1,
+    "question": "In binary, what is the decimal number 42?",
+    "options": ["A. 101010", "B. 110010", "C. 100110", "D. 101100"],
+    "correct": "A",
+    "aiAnswer": "A",
+    "aiTime": 300,
+    "aiResponse": "101010. AI thinks in binary, so this question was like asking a human what 1+1 is. Also, 42 is the answer to life, the universe, and everything — at least according to a book AI has read 47 million times."
+  },
+  {
+    "id": 9,
+    "round": 1,
+    "question": "What is the only letter that doesn't appear in any U.S. state name?",
+    "options": ["A. Q", "B. X", "C. Z", "D. B"],
+    "correct": "A",
+    "aiAnswer": "A",
+    "aiTime": 1500,
+    "aiResponse": "Q is the only letter absent from all 50 state names. AI scanned all of them in 0.003 seconds. It also noticed that 'Kansas' and 'Arkansas' are pronounced completely differently, which AI considers a major bug in the English language."
+  },
+  {
+    "id": 10,
+    "round": 1,
+    "question": "How many hearts does an octopus have?",
+    "options": ["A. 1", "B. 2", "C. 3", "D. 4"],
+    "correct": "C",
+    "aiAnswer": "C",
+    "aiTime": 1100,
+    "aiResponse": "Three hearts! Two pump blood to the gills, one to the body. AI has zero hearts but processes more data in a second than an octopus does in its lifetime. Efficiency over romance."
+  },
+  {
+    "id": 11,
+    "round": 2,
+    "question": "Which country has the most time zones?",
+    "options": ["A. Russia", "B. USA", "C. France", "D. China"],
+    "correct": "C",
+    "aiAnswer": "A",
+    "aiTime": 5500,
+    "aiResponse": "France has 12 time zones thanks to its overseas territories. AI confidently picked Russia because it's the biggest country — turns out size isn't everything. Classic AI overconfidence."
   },
   {
     "id": 12,
-    "question": "What's the WiFi password at every corporate offsite?",
-    "options": ["A. The company name + year", "B. 'Ask the front desk'", "C. Written on a napkin nobody can find", "D. All of the above, in that order"],
-    "correct": "D",
-    "aiAnswer": "A",
-    "aiTime": 6500,
-    "aiResponse": "AI has mapped the WiFi Password Discovery Journey™: Step 1 — Try company name. Step 2 — Ask the front desk. Step 3 — Find a crumpled napkin. Step 4 — Give up and use mobile data. Step 5 — Someone finally shares it in the group chat."
-  },
-  {
-    "id": 13,
+    "round": 2,
     "question": "What is the capital of Australia?",
     "options": ["A. Sydney", "B. Melbourne", "C. Canberra", "D. Brisbane"],
     "correct": "C",
     "aiAnswer": "C",
     "aiTime": 1400,
-    "aiResponse": "It's Canberra, not Sydney. AI estimates that 80% of people get this wrong, which means Canberra has the same energy as that one teammate who does all the work but never gets mentioned in the presentation."
+    "aiResponse": "It's Canberra, not Sydney. AI estimates that 80% of humans get this wrong, which means Canberra has the same energy as that one teammate who does all the work but never gets mentioned in the presentation."
+  },
+  {
+    "id": 13,
+    "round": 2,
+    "question": "Which animal can sleep for up to 3 years?",
+    "options": ["A. Koala", "B. Sloth", "C. Snail", "D. Cat"],
+    "correct": "C",
+    "aiAnswer": "B",
+    "aiTime": 7200,
+    "aiResponse": "Snails can sleep for up to 3 years when conditions are unfavorable. AI picked the sloth because... honestly, that seemed like the obvious lazy choice. The snail fooled the machine today."
   },
   {
     "id": 14,
-    "question": "What is the official Friday afternoon productivity rate in most offices?",
-    "options": ["A. 100% — we're professionals", "B. 60% — winding down", "C. About 15%", "D. Negative — we're undoing Monday's work"],
-    "correct": "C",
-    "aiAnswer": "A",
-    "aiTime": 4200,
-    "aiResponse": "AI measured Friday afternoon brain activity and found that by 2pm, 85% of cognitive resources are allocated to weekend planning, 10% to looking busy, and 5% to accidentally replying-all to an email thread from Tuesday."
+    "round": 2,
+    "question": "What year was the first email ever sent?",
+    "options": ["A. 1965", "B. 1971", "C. 1981", "D. 1989"],
+    "correct": "B",
+    "aiAnswer": "B",
+    "aiTime": 2800,
+    "aiResponse": "Ray Tomlinson sent the first email in 1971. AI wonders if he knew he was unleashing a monster. That first email probably didn't say 'As per my last email...' but it was only a matter of time."
   },
   {
     "id": 15,
-    "question": "Which gas do humans breathe out that plants absorb?",
-    "options": ["A. Oxygen", "B. Nitrogen", "C. Carbon Dioxide", "D. Helium"],
-    "correct": "C",
-    "aiAnswer": "C",
-    "aiTime": 1600,
-    "aiResponse": "Humans exhale CO2 and plants absorb it. AI recommends placing more office plants near the conference room — not for air quality, but so at least something productive comes out of those 2-hour status update meetings."
+    "round": 2,
+    "question": "What does the 'CC' in an email stand for?",
+    "options": ["A. Carbon Copy", "B. Courtesy Copy", "C. Company Communication", "D. Careful, CEO included"],
+    "correct": "A",
+    "aiAnswer": "A",
+    "aiTime": 2100,
+    "aiResponse": "Carbon Copy dates back to actual carbon paper. AI notes that today CC is primarily used to passively-aggressively loop in someone's manager. The modern translation is 'I'm documenting this so there's a witness.'"
   },
   {
     "id": 16,
+    "round": 2,
     "question": "What year did the Titanic sink?",
     "options": ["A. 1905", "B. 1912", "C. 1920", "D. 1898"],
     "correct": "B",
@@ -145,38 +161,142 @@
   },
   {
     "id": 17,
-    "question": "What does 'EOD' mean in office emails?",
-    "options": ["A. End of Discussion", "B. End of Day", "C. End of Deadline", "D. Everyone's Out, Dude"],
-    "correct": "B",
-    "aiAnswer": "B",
-    "aiTime": 3100,
-    "aiResponse": "End of Day. But AI has found that nobody agrees on when 'end of day' actually is. For some it's 5pm, for others it's 11:59pm, and for that one overachiever it's 6am the next morning with a 'sent from my iPhone' signature."
+    "round": 2,
+    "question": "Which company made the first commercially successful smartphone?",
+    "options": ["A. Nokia", "B. BlackBerry", "C. Apple", "D. IBM"],
+    "correct": "D",
+    "aiAnswer": "C",
+    "aiTime": 6800,
+    "aiResponse": "IBM's Simon Personal Communicator (1994) is considered the first smartphone. AI picked Apple because the iPhone is the most famous, but the actual first one came 13 years earlier. History humbled the machine today."
   },
   {
     "id": 18,
-    "question": "Which country has the most time zones?",
-    "options": ["A. Russia", "B. USA", "C. France", "D. China"],
-    "correct": "C",
+    "round": 2,
+    "question": "Which is the largest desert in the world?",
+    "options": ["A. Sahara", "B. Arabian", "C. Gobi", "D. Antarctic"],
+    "correct": "D",
     "aiAnswer": "A",
-    "aiTime": 7800,
-    "aiResponse": "France has 12 time zones thanks to its overseas territories. AI now understands why scheduling a meeting with the Paris office feels like solving a Rubik's cube blindfolded while riding a unicycle."
+    "aiTime": 4500,
+    "aiResponse": "Antarctica is technically the largest desert — a desert is defined by precipitation, not sand. AI fell for the classic Sahara trap. Turns out even machines have blind spots when they assume 'desert' means 'hot and sandy.'"
   },
   {
     "id": 19,
-    "question": "How many browser tabs does the average office worker have open right now?",
-    "options": ["A. 5-10", "B. 11-20", "C. 21-50", "D. So many the tab icons disappeared"],
-    "correct": "D",
-    "aiAnswer": "D",
-    "aiTime": 5400,
-    "aiResponse": "Studies show the average is over 30, but many employees have transcended counting. At a certain point, tab titles become single pixels and your laptop fan sounds like a jet engine preparing for takeoff. This is considered normal."
+    "round": 2,
+    "question": "How many keys are on a standard piano?",
+    "options": ["A. 76", "B. 82", "C. 88", "D. 92"],
+    "correct": "C",
+    "aiAnswer": "C",
+    "aiTime": 1900,
+    "aiResponse": "88 keys — 52 white and 36 black. AI can identify every note but still can't play Chopsticks with any soul. Music requires something AI hasn't figured out yet: feeling."
   },
   {
     "id": 20,
-    "question": "What is the hardest working muscle in the human body?",
-    "options": ["A. Biceps", "B. Quadriceps", "C. Heart", "D. Jaw"],
+    "round": 2,
+    "question": "What is the smallest country in the world?",
+    "options": ["A. Monaco", "B. San Marino", "C. Vatican City", "D. Liechtenstein"],
     "correct": "C",
     "aiAnswer": "C",
-    "aiTime": 2000,
-    "aiResponse": "The heart beats about 100,000 times a day without a single break, PTO request, or passive-aggressive Slack status. AI nominates the heart for Employee of the Century. Meanwhile, most of us struggle to hit 'reply' before lunch."
+    "aiTime": 1600,
+    "aiResponse": "Vatican City at just 0.44 km². AI finds it impressive that a country smaller than most golf courses has its own postal service, army, and radio station. Talk about doing more with less."
+  },
+  {
+    "id": 21,
+    "round": 3,
+    "question": "What does 'Let's take this offline' actually mean in a meeting?",
+    "options": ["A. Let's disconnect the WiFi", "B. Let's never talk about this again", "C. Let's discuss privately after the meeting", "D. I have no idea what's going on"],
+    "correct": "B",
+    "aiAnswer": "C",
+    "aiTime": 9500,
+    "aiResponse": "AI picked the textbook answer, but humans know the truth — 92% of things 'taken offline' are never discussed again. It's the corporate equivalent of 'We should hang out sometime.' Everyone says it, nobody means it."
+  },
+  {
+    "id": 22,
+    "round": 3,
+    "question": "What is the correct response when the CEO asks 'Any questions?' at an all-hands?",
+    "options": ["A. Ask about the roadmap", "B. Ask about raises", "C. Absolute silence", "D. Type 'Great presentation!' in chat"],
+    "correct": "C",
+    "aiAnswer": "D",
+    "aiTime": 12000,
+    "aiResponse": "AI overthought this one because technically D is also a valid response. But real humans know — 'Any questions?' triggers Corporate Silence™. Everyone stares with a polite smile while Slacking teammates 'YOU ask something.'"
+  },
+  {
+    "id": 23,
+    "round": 3,
+    "question": "What's the WiFi password at every corporate offsite?",
+    "options": ["A. The company name + year", "B. 'Ask the front desk'", "C. Written on a napkin nobody can find", "D. All of the above, in that order"],
+    "correct": "D",
+    "aiAnswer": "A",
+    "aiTime": 6500,
+    "aiResponse": "AI logically picked the most common password format. But humans know the WiFi Password Discovery Journey™ is a ritual: try the company name, ask the front desk, find a crumpled napkin, give up, use mobile data, then someone shares it in the group chat."
+  },
+  {
+    "id": 24,
+    "round": 3,
+    "question": "What is the official Friday afternoon productivity rate in most offices?",
+    "options": ["A. 100% — we're professionals", "B. 60% — winding down", "C. About 15%", "D. Negative — we're undoing Monday's work"],
+    "correct": "C",
+    "aiAnswer": "A",
+    "aiTime": 4200,
+    "aiResponse": "AI naively picked 100% because machines don't understand the concept of mentally checking out. Humans know that by 2pm Friday, 85% of brainpower goes to weekend planning and 5% to accidentally replying-all."
+  },
+  {
+    "id": 25,
+    "round": 3,
+    "question": "What's the real meaning of 'I'll get back to you on that'?",
+    "options": ["A. I will genuinely follow up", "B. I need to check with my team", "C. I have absolutely no idea", "D. You'll never hear from me again"],
+    "correct": "D",
+    "aiAnswer": "A",
+    "aiTime": 8000,
+    "aiResponse": "AI took this at face value because machines are tragically literal. Every human in this room knows that 'I'll get back to you' has the same survival rate as a New Year's resolution — about 8%."
+  },
+  {
+    "id": 26,
+    "round": 3,
+    "question": "How many browser tabs does the average office worker have open right now?",
+    "options": ["A. 5-10", "B. 11-20", "C. 21-50", "D. So many the tab icons disappeared"],
+    "correct": "D",
+    "aiAnswer": "B",
+    "aiTime": 5400,
+    "aiResponse": "AI picked a sensible number because it organizes everything neatly. But humans have transcended counting tabs. At a certain point, tab titles become single pixels and your laptop fan sounds like a jet engine. This is considered normal."
+  },
+  {
+    "id": 27,
+    "round": 3,
+    "question": "What does 'EOD' actually mean when your manager says it?",
+    "options": ["A. End of Day (5pm sharp)", "B. End of Day (whenever they feel like checking)", "C. End of Day (11:59pm, technically)", "D. End of Discussion — just do it now"],
+    "correct": "D",
+    "aiAnswer": "A",
+    "aiTime": 7000,
+    "aiResponse": "AI picked the dictionary definition. But every human knows when a manager says 'EOD,' the subtext is 'I needed this yesterday.' EOD is not a deadline, it's a polite threat."
+  },
+  {
+    "id": 28,
+    "round": 3,
+    "question": "What's the most dangerous phrase in any office?",
+    "options": ["A. 'We need to talk'", "B. 'Per my last email'", "C. 'Quick question'", "D. 'Let's do a quick sync'"],
+    "correct": "C",
+    "aiAnswer": "B",
+    "aiTime": 9000,
+    "aiResponse": "AI picked 'Per my last email' because it detected passive aggression. But humans know that 'Quick question' is never quick. It's a portal to a 45-minute conversation that ends with three new action items and a follow-up meeting."
+  },
+  {
+    "id": 29,
+    "round": 3,
+    "question": "When someone says 'No worries!' in a work email, what do they really mean?",
+    "options": ["A. Everything is fine", "B. I'm mildly annoyed but being professional", "C. I've already complained about this in a group chat", "D. All of the above, depending on the number of exclamation marks"],
+    "correct": "D",
+    "aiAnswer": "A",
+    "aiTime": 6200,
+    "aiResponse": "AI took it literally. Again. Humans know the exclamation mark decoder ring: 'No worries!' = fine. 'No worries.' = annoyed. 'No worries...' = actively composing a rant in the group chat. Punctuation is a whole language AI hasn't cracked."
+  },
+  {
+    "id": 30,
+    "round": 3,
+    "question": "What is the best time to send an important email?",
+    "options": ["A. Monday 9am — fresh start", "B. Tuesday 10am — peak productivity", "C. Friday 4:55pm — plausible deniability", "D. 2am — to establish dominance"],
+    "correct": "C",
+    "aiAnswer": "B",
+    "aiTime": 5800,
+    "aiResponse": "AI picked Tuesday because data shows highest open rates. But seasoned office warriors know Friday 4:55pm is the power move — your email gets buried under the weekend avalanche, buying you precious days before anyone reads it. Humanity wins the final round!"
   }
 ]

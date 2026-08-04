@@ -15,6 +15,7 @@ const handle = app.getRequestHandler();
 // ── Types ──────────────────────────────────────────────
 interface Question {
   id: number;
+  round: number;
   question: string;
   options: string[];
   correct: string;
@@ -45,12 +46,25 @@ interface GameState {
   sessionCode: string;
 }
 
+// ── Round definitions ─────────────────────────────────
+const ROUNDS = [
+  { number: 1, name: 'The Machine Round', subtitle: 'Can you keep up with AI?', emoji: '🤖' },
+  { number: 2, name: 'The Battle Round', subtitle: 'Human vs Machine — who knows more?', emoji: '⚔️' },
+  { number: 3, name: 'The Human Round', subtitle: 'Time for humans to shine!', emoji: '🧠' },
+];
+
+function getRoundInfo(questionIndex: number, questions: Question[]) {
+  const q = questions[questionIndex];
+  if (!q) return ROUNDS[0];
+  return ROUNDS.find(r => r.number === q.round) || ROUNDS[0];
+}
+
 // ── Load Questions ─────────────────────────────────────
 const questionsPath = path.join(__dirname, 'src', 'data', 'questions.json');
 const questions: Question[] = JSON.parse(fs.readFileSync(questionsPath, 'utf-8'));
 
 // ── Constants ──────────────────────────────────────────
-const QUESTION_TIME = 20;
+const QUESTION_TIME = 15;
 const AI_PARTICIPANT_ID = '__AI_PLAYER__';
 
 function generateSessionCode(): string {
@@ -167,7 +181,6 @@ function getQuestionStats() {
     }
   }
 
-  // AI stats for this question
   const aiPlayer = gameState.participants.get(AI_PARTICIPANT_ID);
   const aiStats = aiPlayer ? {
     aiAnswer: aiPlayer.currentAnswer,
@@ -190,6 +203,13 @@ function getQuestionStats() {
 function broadcastGameState(io: SocketIOServer) {
   const currentQ = questions[gameState.currentQuestionIndex];
   const aiPlayer = gameState.participants.get(AI_PARTICIPANT_ID) || null;
+  const roundInfo = gameState.currentQuestionIndex >= 0
+    ? getRoundInfo(gameState.currentQuestionIndex, questions)
+    : ROUNDS[0];
+
+  // Check if this is the first question of a new round
+  const prevQ = gameState.currentQuestionIndex > 0 ? questions[gameState.currentQuestionIndex - 1] : null;
+  const isNewRound = currentQ && (!prevQ || prevQ.round !== currentQ.round);
 
   io.to('host').emit('gameState', {
     status: gameState.status,
@@ -202,6 +222,9 @@ function broadcastGameState(io: SocketIOServer) {
     stats: getQuestionStats(),
     sessionCode: gameState.sessionCode,
     aiPlayer,
+    roundInfo,
+    isNewRound,
+    currentRound: currentQ?.round || 1,
   });
 
   io.to('participants').emit('gameState', {
@@ -218,6 +241,9 @@ function broadcastGameState(io: SocketIOServer) {
     leaderboard: getLeaderboard().slice(0, 10),
     totalPlayers: getHumanParticipants().length,
     aiPlayer,
+    roundInfo,
+    isNewRound,
+    currentRound: currentQ?.round || 1,
   });
 }
 
@@ -226,7 +252,6 @@ function startTimer(io: SocketIOServer) {
   gameState.timeRemaining = QUESTION_TIME;
   gameState.questionStartTime = Date.now();
 
-  // Schedule AI answer
   scheduleAIAnswer(io);
 
   timerInterval = setInterval(() => {
@@ -260,7 +285,7 @@ function resetGame() {
   gameState.timeRemaining = QUESTION_TIME;
   gameState.answers.clear();
   gameState.sessionCode = generateSessionCode();
-  for (const [id, p] of gameState.participants) {
+  for (const [, p] of gameState.participants) {
     p.score = 0;
     p.totalTime = 0;
     p.answeredCount = 0;
@@ -321,7 +346,6 @@ app.prepare().then(() => {
       stopTimer();
       gameState.status = 'showing_answer';
 
-      // If AI hasn't answered yet, force its answer now
       const aiPlayer = gameState.participants.get(AI_PARTICIPANT_ID);
       const currentQ = questions[gameState.currentQuestionIndex];
       if (aiPlayer && aiPlayer.currentAnswer === null && currentQ) {
@@ -434,7 +458,6 @@ app.prepare().then(() => {
     });
 
     socket.on('disconnect', () => {
-      // Never delete AI participant
       if (socket.id !== AI_PARTICIPANT_ID) {
         gameState.participants.delete(socket.id);
       }
@@ -446,7 +469,7 @@ app.prepare().then(() => {
   expressApp.all('*', (req: any, res: any) => handle(req, res));
 
   server.listen(port, hostname, () => {
-    console.log(`\n🎯 Reliance Matrix Quiz Server — AI vs Humanity`);
+    console.log(`\n🧠 Are You Smarter Than AI? — Quiz Server`);
     console.log(`   Local:    http://localhost:${port}`);
     console.log(`   Host:     http://localhost:${port}/host`);
     console.log(`   Session:  ${gameState.sessionCode}\n`);
