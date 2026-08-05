@@ -49,9 +49,9 @@ interface GameState {
 
 // ── Round definitions ─────────────────────────────────
 const ROUNDS = [
-  { number: 1, name: 'Logic', subtitle: 'Logic' },
-  { number: 2, name: 'Knowledge', subtitle: 'Knowledge' },
-  { number: 3, name: 'Judgment', subtitle: 'Judgment' },
+  { number: 1, name: 'Battle of Logic', subtitle: 'Logic', emoji: '🤖' },
+  { number: 2, name: 'Battle of Wits', subtitle: 'Knowledge', emoji: '⚔️' },
+  { number: 3, name: 'Battle of Instinct', subtitle: 'Judgment', emoji: '🧠' },
 ];
 
 function getRoundInfo(questionIndex: number, questions: Question[]) {
