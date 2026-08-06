@@ -17,17 +17,17 @@ scenarios:
     engine: socketio-v3
     flow:
       - emit:
-          channel: "join"
+          channel: "participant:join"
           data:
             name: "Test_{{ $randomNumber(1000,9999) }}"
       - think: 5
       - emit:
-          channel: "submitAnswer"
+          channel: "participant:answer"
           data:
             answer: "B"
       - think: 10
       - emit:
-          channel: "submitAnswer"
+          channel: "participant:answer"
           data:
             answer: "C"
       - think: 30

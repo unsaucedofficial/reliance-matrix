@@ -6,7 +6,7 @@ config:
       arrivalRate: 10
       name: "Ramp up to 200 users"
     # Hold: keep connections alive while quiz runs
-    - duration: 120
+    - duration: 600
       arrivalRate: 0
       name: "Hold connections during quiz"
   engines:
@@ -15,6 +15,16 @@ config:
   socketio-v3:
     query:
       EIO: "4"
+  payload:
+    - path: ""
+      fields: []
+      loadAll: false
+  variables:
+    options:
+      - "A"
+      - "B"
+      - "C"
+      - "D"
 
 scenarios:
   - name: "Quiz participant"
@@ -22,7 +32,7 @@ scenarios:
     flow:
       # Join the quiz
       - emit:
-          channel: "join"
+          channel: "participant:join"
           data:
             name: "LoadTest_{{ $randomNumber(1000,9999) }}"
 
@@ -33,221 +43,221 @@ scenarios:
       # Q1 - 12s timer
       - think: "{{ $randomNumber(2,10) }}"
       - emit:
-          channel: "submitAnswer"
+          channel: "participant:answer"
           data:
-            answer: "{{ $randomString() }}"
+            answer: "B"
       - think: 15
 
       # Q2 - 15s timer
       - think: "{{ $randomNumber(2,12) }}"
       - emit:
-          channel: "submitAnswer"
+          channel: "participant:answer"
           data:
-            answer: "{{ $randomString() }}"
+            answer: "C"
       - think: 15
 
       # Q3 - 20s timer
       - think: "{{ $randomNumber(2,15) }}"
       - emit:
-          channel: "submitAnswer"
+          channel: "participant:answer"
           data:
-            answer: "{{ $randomString() }}"
+            answer: "A"
       - think: 15
 
       # Q4 - 25s timer
       - think: "{{ $randomNumber(2,20) }}"
       - emit:
-          channel: "submitAnswer"
+          channel: "participant:answer"
           data:
-            answer: "{{ $randomString() }}"
+            answer: "D"
       - think: 15
 
       # Q5 - 25s timer
       - think: "{{ $randomNumber(2,20) }}"
       - emit:
-          channel: "submitAnswer"
+          channel: "participant:answer"
           data:
-            answer: "{{ $randomString() }}"
+            answer: "B"
       - think: 15
 
       # Q6 - 30s timer
       - think: "{{ $randomNumber(2,25) }}"
       - emit:
-          channel: "submitAnswer"
+          channel: "participant:answer"
           data:
-            answer: "{{ $randomString() }}"
+            answer: "A"
       - think: 15
 
       # Q7 - 30s timer
       - think: "{{ $randomNumber(2,25) }}"
       - emit:
-          channel: "submitAnswer"
+          channel: "participant:answer"
           data:
-            answer: "{{ $randomString() }}"
+            answer: "C"
       - think: 15
 
       # Q8 - 45s timer
       - think: "{{ $randomNumber(2,35) }}"
       - emit:
-          channel: "submitAnswer"
+          channel: "participant:answer"
           data:
-            answer: "{{ $randomString() }}"
+            answer: "B"
       - think: 15
 
       # Q9 - 35s timer
       - think: "{{ $randomNumber(2,30) }}"
       - emit:
-          channel: "submitAnswer"
+          channel: "participant:answer"
           data:
-            answer: "{{ $randomString() }}"
+            answer: "D"
       - think: 15
 
       # Q10 - 60s timer
       - think: "{{ $randomNumber(2,50) }}"
       - emit:
-          channel: "submitAnswer"
+          channel: "participant:answer"
           data:
-            answer: "{{ $randomString() }}"
+            answer: "A"
       - think: 20
 
       # Round 2 - 10 questions (mostly 20-35s timers)
       - think: "{{ $randomNumber(2,15) }}"
       - emit:
-          channel: "submitAnswer"
+          channel: "participant:answer"
           data:
-            answer: "{{ $randomString() }}"
+            answer: "C"
       - think: 15
 
       - think: "{{ $randomNumber(2,15) }}"
       - emit:
-          channel: "submitAnswer"
+          channel: "participant:answer"
           data:
-            answer: "{{ $randomString() }}"
+            answer: "A"
       - think: 15
 
       - think: "{{ $randomNumber(2,15) }}"
       - emit:
-          channel: "submitAnswer"
+          channel: "participant:answer"
           data:
-            answer: "{{ $randomString() }}"
+            answer: "B"
       - think: 15
 
       - think: "{{ $randomNumber(2,15) }}"
       - emit:
-          channel: "submitAnswer"
+          channel: "participant:answer"
           data:
-            answer: "{{ $randomString() }}"
+            answer: "D"
       - think: 15
 
       - think: "{{ $randomNumber(2,15) }}"
       - emit:
-          channel: "submitAnswer"
+          channel: "participant:answer"
           data:
-            answer: "{{ $randomString() }}"
+            answer: "A"
       - think: 15
 
       - think: "{{ $randomNumber(2,20) }}"
       - emit:
-          channel: "submitAnswer"
+          channel: "participant:answer"
           data:
-            answer: "{{ $randomString() }}"
+            answer: "C"
       - think: 15
 
       - think: "{{ $randomNumber(2,20) }}"
       - emit:
-          channel: "submitAnswer"
+          channel: "participant:answer"
           data:
-            answer: "{{ $randomString() }}"
+            answer: "B"
       - think: 15
 
       - think: "{{ $randomNumber(2,25) }}"
       - emit:
-          channel: "submitAnswer"
+          channel: "participant:answer"
           data:
-            answer: "{{ $randomString() }}"
+            answer: "A"
       - think: 15
 
       - think: "{{ $randomNumber(2,30) }}"
       - emit:
-          channel: "submitAnswer"
+          channel: "participant:answer"
           data:
-            answer: "{{ $randomString() }}"
+            answer: "D"
       - think: 15
 
       - think: "{{ $randomNumber(2,20) }}"
       - emit:
-          channel: "submitAnswer"
+          channel: "participant:answer"
           data:
-            answer: "{{ $randomString() }}"
+            answer: "B"
       - think: 20
 
       # Round 3 - 10 questions (20-45s timers)
       - think: "{{ $randomNumber(2,15) }}"
       - emit:
-          channel: "submitAnswer"
+          channel: "participant:answer"
           data:
-            answer: "{{ $randomString() }}"
+            answer: "C"
       - think: 15
 
       - think: "{{ $randomNumber(2,15) }}"
       - emit:
-          channel: "submitAnswer"
+          channel: "participant:answer"
           data:
-            answer: "{{ $randomString() }}"
+            answer: "A"
       - think: 15
 
       - think: "{{ $randomNumber(2,20) }}"
       - emit:
-          channel: "submitAnswer"
+          channel: "participant:answer"
           data:
-            answer: "{{ $randomString() }}"
+            answer: "D"
       - think: 15
 
       - think: "{{ $randomNumber(2,20) }}"
       - emit:
-          channel: "submitAnswer"
+          channel: "participant:answer"
           data:
-            answer: "{{ $randomString() }}"
+            answer: "B"
       - think: 15
 
       - think: "{{ $randomNumber(2,20) }}"
       - emit:
-          channel: "submitAnswer"
+          channel: "participant:answer"
           data:
-            answer: "{{ $randomString() }}"
+            answer: "A"
       - think: 15
 
       - think: "{{ $randomNumber(2,20) }}"
       - emit:
-          channel: "submitAnswer"
+          channel: "participant:answer"
           data:
-            answer: "{{ $randomString() }}"
+            answer: "C"
       - think: 15
 
       - think: "{{ $randomNumber(2,20) }}"
       - emit:
-          channel: "submitAnswer"
+          channel: "participant:answer"
           data:
-            answer: "{{ $randomString() }}"
+            answer: "D"
       - think: 15
 
       - think: "{{ $randomNumber(2,20) }}"
       - emit:
-          channel: "submitAnswer"
+          channel: "participant:answer"
           data:
-            answer: "{{ $randomString() }}"
+            answer: "B"
       - think: 15
 
       - think: "{{ $randomNumber(2,35) }}"
       - emit:
-          channel: "submitAnswer"
+          channel: "participant:answer"
           data:
-            answer: "{{ $randomString() }}"
+            answer: "A"
       - think: 15
 
       - think: "{{ $randomNumber(2,20) }}"
       - emit:
-          channel: "submitAnswer"
+          channel: "participant:answer"
           data:
-            answer: "{{ $randomString() }}"
+            answer: "C"
       - think: 30
