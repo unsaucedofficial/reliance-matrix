@@ -163,12 +163,12 @@ function getParticipantsList() {
   }));
 }
 
-function getLeaderboard(): Participant[] {
+function getLeaderboard() {
   return getParticipantsList()
     .sort((a, b) => b.score - a.score);
 }
 
-function getHumanParticipants(): Participant[] {
+function getHumanParticipants() {
   return getParticipantsList().filter(p => !p.isAI);
 }
 
