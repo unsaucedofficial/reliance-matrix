@@ -119,7 +119,7 @@ function scheduleAIAnswer(io: SocketIOServer) {
   const currentQ = questions[gameState.currentQuestionIndex];
   if (!currentQ) return;
 
-  const aiTime = currentQ.aiTime;
+  const AI_ANSWER_TIME = 1000; // AI always answers in 1 second
   const aiAnswer = currentQ.aiAnswer;
 
   aiTimeout = setTimeout(() => {
@@ -129,21 +129,19 @@ function scheduleAIAnswer(io: SocketIOServer) {
     if (!aiPlayer || aiPlayer.currentAnswer !== null) return;
 
     aiPlayer.currentAnswer = aiAnswer;
-    aiPlayer.currentTime = aiTime;
+    aiPlayer.currentTime = AI_ANSWER_TIME;
     aiPlayer.answeredCount++;
 
-    gameState.answers.set(AI_PARTICIPANT_ID, { answer: aiAnswer, time: aiTime });
+    gameState.answers.set(AI_PARTICIPANT_ID, { answer: aiAnswer, time: AI_ANSWER_TIME });
 
     if (aiAnswer === currentQ.correct) {
-      const qTime = getQuestionTime(gameState.currentQuestionIndex);
-      const timeBonus = Math.max(0, Math.round(500 * (1 - aiTime / (qTime * 1000))));
-      aiPlayer.score += 1000 + timeBonus;
+      aiPlayer.score += 1000;
       aiPlayer.correctCount++;
     }
-    aiPlayer.totalTime += aiTime;
+    aiPlayer.totalTime += AI_ANSWER_TIME;
 
     broadcastGameState(io);
-  }, aiTime);
+  }, AI_ANSWER_TIME);
 }
 
 // ── Helpers ────────────────────────────────────────────
@@ -153,11 +151,7 @@ function getParticipantsList(): Participant[] {
 
 function getLeaderboard(): Participant[] {
   return getParticipantsList()
-    .sort((a, b) => {
-      if (b.score !== a.score) return b.score - a.score;
-      if (a.totalTime !== b.totalTime) return a.totalTime - b.totalTime;
-      return 0;
-    });
+    .sort((a, b) => b.score - a.score);
 }
 
 function getHumanParticipants(): Participant[] {
@@ -391,18 +385,16 @@ app.prepare().then(() => {
       const aiPlayer = gameState.participants.get(AI_PARTICIPANT_ID);
       const currentQ = questions[gameState.currentQuestionIndex];
       if (aiPlayer && aiPlayer.currentAnswer === null && currentQ) {
-        const elapsed = gameState.questionStartTime ? Date.now() - gameState.questionStartTime : currentQ.aiTime;
+        const AI_ANSWER_TIME = 1000;
         aiPlayer.currentAnswer = currentQ.aiAnswer;
-        aiPlayer.currentTime = Math.min(elapsed, currentQ.aiTime);
+        aiPlayer.currentTime = AI_ANSWER_TIME;
         aiPlayer.answeredCount++;
-        gameState.answers.set(AI_PARTICIPANT_ID, { answer: currentQ.aiAnswer, time: aiPlayer.currentTime });
+        gameState.answers.set(AI_PARTICIPANT_ID, { answer: currentQ.aiAnswer, time: AI_ANSWER_TIME });
         if (currentQ.aiAnswer === currentQ.correct) {
-          const qTime = getQuestionTime(gameState.currentQuestionIndex);
-          const timeBonus = Math.max(0, Math.round(500 * (1 - aiPlayer.currentTime / (qTime * 1000))));
-          aiPlayer.score += 1000 + timeBonus;
+          aiPlayer.score += 1000;
           aiPlayer.correctCount++;
         }
-        aiPlayer.totalTime += aiPlayer.currentTime;
+        aiPlayer.totalTime += AI_ANSWER_TIME;
       }
 
       io.emit('answerRevealed', {
@@ -491,9 +483,7 @@ app.prepare().then(() => {
 
       const currentQ = questions[gameState.currentQuestionIndex];
       if (currentQ && data.answer === currentQ.correct) {
-        const qTime = getQuestionTime(gameState.currentQuestionIndex);
-        const timeBonus = Math.max(0, Math.round(500 * (1 - timeTaken / (qTime * 1000))));
-        participant.score += 1000 + timeBonus;
+        participant.score += 1000;
         participant.correctCount++;
       }
       participant.totalTime += timeTaken;
@@ -503,10 +493,12 @@ app.prepare().then(() => {
     });
 
     socket.on('disconnect', () => {
-      if (socket.id !== AI_PARTICIPANT_ID) {
+      // Only remove participants in lobby (waiting). During active game, keep them
+      // so scores and leaderboard are preserved even if connection drops.
+      if (socket.id !== AI_PARTICIPANT_ID && gameState.status === 'waiting') {
         gameState.participants.delete(socket.id);
+        broadcastGameState(io);
       }
-      broadcastGameState(io);
       console.log(`Disconnected: ${socket.id}`);
     });
   });

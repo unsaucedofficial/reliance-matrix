@@ -601,7 +601,6 @@ export default function ParticipantPage() {
               <div className="bg-cyan-500/10 rounded-xl p-3 border border-cyan-500/20">
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-cyan-400 font-semibold">🤖 AI picked: {answerReveal.aiAnswer}</span>
-                  <span className="text-xs text-gray-400">{(answerReveal.aiTime / 1000).toFixed(1)}s</span>
                 </div>
                 <p className={`text-xs font-semibold mt-1 ${answerReveal.aiAnswer === answerReveal.correct ? 'text-green-400' : 'text-red-400'}`}>
                   {answerReveal.aiAnswer === answerReveal.correct ? '✅ AI got it right' : '❌ AI got it wrong!'}

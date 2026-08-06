@@ -577,7 +577,7 @@ export default function HostDashboard() {
                 <div className="flex-1 min-w-0">
                   <p className={`font-semibold truncate ${p.isAI ? 'text-cyan-400' : ''}`}>{p.name}</p>
                   <p className="text-xs text-gray-400">
-                    {p.correctCount}/{p.answeredCount} correct &middot; avg {p.answeredCount > 0 ? Math.round(p.totalTime / p.answeredCount / 1000 * 10) / 10 : 0}s
+                    {p.correctCount}/{p.answeredCount} correct
                   </p>
                 </div>
                 <span className={`text-xl font-bold ${p.isAI ? 'text-cyan-400' : 'text-brand-400'}`}>{p.score}</span>
@@ -701,9 +701,6 @@ export default function HostDashboard() {
                             >
                               <div className="flex items-center justify-between">
                                 <p className="text-xs text-cyan-400 font-semibold uppercase tracking-wider">🤖 AI picked: {stats.aiStats.aiAnswer}</p>
-                                <p className="text-xs text-gray-400">
-                                  in {stats.aiStats.aiTime !== null ? `${(stats.aiStats.aiTime / 1000).toFixed(1)}s` : '-'}
-                                </p>
                               </div>
                               <p className={`text-sm font-semibold mt-1 ${stats.aiStats.aiCorrect ? 'text-green-400' : 'text-red-400'}`}>
                                 {stats.aiStats.aiCorrect ? '✅ AI got it right!' : '❌ AI got it wrong!'}
@@ -776,10 +773,6 @@ export default function HostDashboard() {
                       <StatCard icon="✅" label="Answered" value={`${stats.totalAnswered}/${stats.totalPlayers}`} color="teal" />
                       <StatCard icon="🎯" label="Correct" value={stats.correctCount} color="green" />
                       <StatCard icon="❌" label="Wrong" value={stats.wrongCount} color="red" />
-                      <StatCard icon="⚡" label="Fastest Human" value={stats.fastestTime ? `${(stats.fastestTime / 1000).toFixed(1)}s` : '-'} color="orange" />
-                      <StatCard icon="📊" label="Avg Time" value={stats.avgTime ? `${(stats.avgTime / 1000).toFixed(1)}s` : '-'} color="gold" />
-                      <StatCard icon="🏅" label="Fastest Correct" value={stats.fastestCorrectName || '-'} color="brand" />
-                      <StatCard icon="🤖" label="AI Time" value={aiPlayer?.currentTime ? `${(aiPlayer.currentTime / 1000).toFixed(1)}s` : 'Thinking...'} color="cyan" />
                     </div>
                   )}
                 </div>
@@ -817,9 +810,6 @@ export default function HostDashboard() {
                         <div className="flex items-center gap-2 text-sm bg-cyan-500/10 rounded-lg px-2 py-1.5 border border-cyan-500/20">
                           <span className="text-cyan-400 w-5">🤖</span>
                           <span className="flex-1 truncate text-cyan-400 font-medium">AI</span>
-                          <span className="text-xs text-cyan-400/70">
-                            {aiPlayer.currentTime ? `${(aiPlayer.currentTime / 1000).toFixed(1)}s` : ''}
-                          </span>
                           {showAnswer && q && (
                             <span>{aiPlayer.currentAnswer === q.correct ? '✅' : '❌'}</span>
                           )}
@@ -832,9 +822,6 @@ export default function HostDashboard() {
                           <div key={p.id} className="flex items-center gap-2 text-sm">
                             <span className="text-gray-500 w-5">{i + 1}.</span>
                             <span className="flex-1 truncate">{p.name}</span>
-                            <span className="text-xs text-gray-500">
-                              {p.currentTime ? `${(p.currentTime / 1000).toFixed(1)}s` : ''}
-                            </span>
                             {showAnswer && q && (
                               <span>{p.currentAnswer === q.correct ? '✅' : '❌'}</span>
                             )}
@@ -866,7 +853,7 @@ export default function HostDashboard() {
                     <div className="flex-1 min-w-0">
                       <p className={`font-semibold truncate text-lg ${p.isAI ? 'text-cyan-400' : ''}`}>{p.name}</p>
                       <p className="text-xs text-gray-400">
-                        {p.correctCount}/{p.answeredCount} correct &middot; avg {p.answeredCount > 0 ? `${(p.totalTime / p.answeredCount / 1000).toFixed(1)}s` : '-'}
+                        {p.correctCount}/{p.answeredCount} correct
                       </p>
                     </div>
                     <div className="text-right">
