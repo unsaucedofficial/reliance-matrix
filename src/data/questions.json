@@ -122,7 +122,7 @@
   {
     "id": 11,
     "round": 2,
-    "question": "Reliance Standard Life Insurance Company is sitused in which state?",
+    "question": "Reliance Standard Life Insurance Company is situated in which state?",
     "options": ["A. Pennsylvania", "B. New York", "C. Delaware", "D. Illinois"],
     "correct": "D",
     "aiAnswer": "D",
@@ -338,19 +338,19 @@
   {
     "id": 29,
     "round": 3,
-    "question": "Which combination of team members DOES NOT add up to 100 years working at Reliance Matrix?",
+    "question": "Which combination of team members adds up to 100 years working at Reliance Matrix?",
     "options": [
       "A. Chris Fazzini, Marisol Ortiz, Bruce Jenkins & Shera Chase",
       "B. Val Strobel, Christine Newfrock, John Staub & Luce Giroux",
       "C. Janine Kane, Karl Lang, Rich Hellwig, Garrett Ey, Paula Hanson, Dave Shaw & Patrick Trinsey",
       "D. Brian Smith, Chris Smith, Gordon Smith, Melissa Smith, Parker Smith & Melissa Jones"
     ],
-    "correct": "D",
-    "aiAnswer": "A",
+    "correct": "C",
+    "aiAnswer": "D",
     "aiTime": 14000,
     "timer": 45,
     "aiConfidence": "19%",
-    "aiResponse": "Nineteen percent. I picked A, on the reasoning that it has the fewest people and therefore probably the fewest years. It is D. I also assumed the five Smiths were one family, which I am now told they are not, which means the only thing I noticed about six of your colleagues was a coincidence in spelling. One question ago I won by betting on the name Smith. This time the Smiths were the answer again and I still could not see them. But I want to say something about this question specifically. In round one I told you I acquired everything I know in a training run lasting a few weeks, and that I did not understand what the extra twenty years were for. Every one of these groups is roughly a century of showing up. Of covering for each other. Of knowing which claim to escalate and which colleague is having a hard month. I compressed the world's text in a few weeks and I still cannot tell you which of these people add up to a hundred years, because it was never text. It was time. And I have never spent any."
+    "aiResponse": "Nineteen percent. I picked D, because I saw five Smiths and assumed one family with a century of combined service. They are not one family, and they do not add up to a hundred. The answer is C — Janine, Karl, Rich, Garrett, Paula, Dave, and Patrick. Seven people whose combined tenure reaches a century. But I want to say something about this question specifically. In round one I told you I acquired everything I know in a training run lasting a few weeks, and that I did not understand what the extra twenty years were for. Every one of these groups represents decades of showing up. Of covering for each other. Of knowing which claim to escalate and which colleague is having a hard month. I compressed the world's text in a few weeks and I still cannot tell you which of these people add up to a hundred years, because it was never text. It was time. And I have never spent any."
   },
   {
     "id": 30,

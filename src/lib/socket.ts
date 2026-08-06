@@ -10,7 +10,21 @@ export function getSocket(): Socket {
     socket = io(url, {
       transports: ['websocket', 'polling'],
       autoConnect: true,
+      reconnection: true,
+      reconnectionAttempts: Infinity,
+      reconnectionDelay: 500,
+      reconnectionDelayMax: 3000,
+      timeout: 10000,
     });
+
+    // When user switches back to the app/tab, force reconnect if disconnected
+    if (typeof document !== 'undefined') {
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible' && socket && !socket.connected) {
+          socket.connect();
+        }
+      });
+    }
   }
   return socket;
 }

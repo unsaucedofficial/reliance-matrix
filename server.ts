@@ -449,6 +449,28 @@ app.prepare().then(() => {
       const name = data.name.trim();
       if (!name) return;
 
+      // If game is active, check if this is a reconnecting participant (same name)
+      if (gameState.status !== 'waiting') {
+        let existingEntry: [string, Participant] | undefined;
+        for (const [id, p] of gameState.participants) {
+          if (p.name === name && !p.isAI) {
+            existingEntry = [id, p];
+            break;
+          }
+        }
+        if (existingEntry) {
+          const [oldId, oldParticipant] = existingEntry;
+          // Move participant to new socket id, preserving score
+          gameState.participants.delete(oldId);
+          oldParticipant.id = socket.id;
+          gameState.participants.set(socket.id, oldParticipant);
+          socket.join('participants');
+          socket.emit('joined', { name: oldParticipant.name, sessionCode: gameState.sessionCode });
+          broadcastGameState(io);
+          return;
+        }
+      }
+
       let displayName = name;
       let counter = 1;
       const existingNames = new Set(

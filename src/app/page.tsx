@@ -153,6 +153,13 @@ export default function ParticipantPage() {
       setJoined(true);
     });
 
+    // On reconnect, re-join with the same name so server recognizes us
+    socket.on('connect', () => {
+      if (displayName) {
+        socket.emit('participant:join', { name: displayName });
+      }
+    });
+
     socket.on('gameState', (state: GameState) => {
       setGameState(state);
       if (state.currentQuestionIndex !== prevQuestionRef.current) {
@@ -209,6 +216,7 @@ export default function ParticipantPage() {
 
     return () => {
       socket.off('joined');
+      socket.off('connect');
       socket.off('gameState');
       socket.off('timer');
       socket.off('answerRevealed');
@@ -216,7 +224,7 @@ export default function ParticipantPage() {
       socket.off('roundComplete');
       socket.off('forceReset');
     };
-  }, [selectedAnswer]);
+  }, [selectedAnswer, displayName]);
 
   const handleJoin = useCallback(() => {
     if (!name.trim()) return;
