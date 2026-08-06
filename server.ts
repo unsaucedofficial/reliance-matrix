@@ -540,6 +540,13 @@ app.prepare().then(() => {
         ? data.questionIndex
         : gameState.currentQuestionIndex;
 
+      // Reject answers for future questions (not yet reached)
+      if (answerQuestionIndex > gameState.currentQuestionIndex) {
+        console.log(`[ANSWER DROPPED] ${participant.name}: tried to answer Q${answerQuestionIndex + 1} but server is only on Q${gameState.currentQuestionIndex + 1}`);
+        ack({ error: 'future_question' });
+        return;
+      }
+
       // DEFINITIVE duplicate check: has this participant already answered THIS question?
       if (participant.answeredQuestions.has(answerQuestionIndex)) {
         ack({ timeTaken: participant.currentTime || 0, duplicate: true });
