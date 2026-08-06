@@ -51,6 +51,7 @@ interface HostGameState {
     options: string[];
     correct: string;
     aiResponse: string;
+    aiConfidence: string;
   } | null;
   timeRemaining: number;
   questionTimer: number;
@@ -718,7 +719,14 @@ export default function HostDashboard() {
                               animate={{ opacity: 1, height: 'auto' }}
                               className="mt-4 bg-brand-500/10 rounded-2xl p-5 border border-brand-500/20"
                             >
-                              <p className="text-xs text-brand-400 font-semibold uppercase tracking-wider mb-2">🤖 AI Response</p>
+                              <div className="flex items-center justify-between mb-2">
+                                <p className="text-xs text-brand-400 font-semibold uppercase tracking-wider">🤖 AI Response</p>
+                                {q.aiConfidence && (
+                                  <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-400">
+                                    Confidence: {q.aiConfidence}
+                                  </span>
+                                )}
+                              </div>
                               <p className="text-gray-300 leading-relaxed">{q.aiResponse}</p>
                             </motion.div>
                           )}

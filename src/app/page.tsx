@@ -56,6 +56,7 @@ interface AnswerReveal {
   aiResponse: string;
   aiAnswer: string;
   aiTime: number;
+  aiConfidence: string;
 }
 
 const ROUND_COLORS: Record<number, { text: string; bg: string }> = {
@@ -608,7 +609,14 @@ export default function ParticipantPage() {
               </div>
 
               <div className="bg-white/5 rounded-xl p-4">
-                <p className="text-xs text-brand-400 font-semibold uppercase tracking-wider mb-2">🤖 AI Says</p>
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-xs text-brand-400 font-semibold uppercase tracking-wider">🤖 AI Says</p>
+                  {answerReveal.aiConfidence && (
+                    <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-400">
+                      Confidence: {answerReveal.aiConfidence}
+                    </span>
+                  )}
+                </div>
                 <p className="text-sm text-gray-300 leading-relaxed">{answerReveal.aiResponse}</p>
               </div>
             </motion.div>

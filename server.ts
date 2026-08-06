@@ -23,6 +23,7 @@ interface Question {
   aiTime: number;
   aiResponse: string;
   timer: number;
+  aiConfidence: string;
 }
 
 interface Participant {
@@ -409,6 +410,7 @@ app.prepare().then(() => {
         aiResponse: currentQ.aiResponse,
         aiAnswer: currentQ.aiAnswer,
         aiTime: currentQ.aiTime,
+        aiConfidence: currentQ.aiConfidence,
         stats: getQuestionStats(),
       });
       broadcastGameState(io);
