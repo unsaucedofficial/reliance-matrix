@@ -92,6 +92,7 @@ const gameState: GameState = {
 
 let timerInterval: NodeJS.Timeout | null = null;
 let aiTimeout: NodeJS.Timeout | null = null;
+let broadcastPending: NodeJS.Timeout | null = null;
 
 // ── AI Participant ─────────────────────────────────────
 function createAIParticipant(): Participant {
@@ -252,6 +253,15 @@ function broadcastGameState(io: SocketIOServer) {
     isNewRound,
     currentRound: currentQ?.round || 1,
   });
+}
+
+// Throttled version — coalesces rapid-fire broadcasts (e.g. 200 answers arriving at once)
+function broadcastGameStateThrottled(io: SocketIOServer) {
+  if (broadcastPending) return; // already scheduled
+  broadcastPending = setTimeout(() => {
+    broadcastPending = null;
+    broadcastGameState(io);
+  }, 300);
 }
 
 function startTimer(io: SocketIOServer) {
@@ -499,21 +509,27 @@ app.prepare().then(() => {
       broadcastGameState(io);
     });
 
-    socket.on('participant:answer', (data: { answer: string }) => {
+    socket.on('participant:answer', (data: { answer: string }, ackFn?: (res: any) => void) => {
       const participant = gameState.participants.get(socket.id);
+      const ack = (res: any) => {
+        if (typeof ackFn === 'function') ackFn(res);
+        socket.emit('answerReceived', res);  // belt-and-suspenders: emit AND ack
+      };
 
       // Log every answer attempt for debugging
       if (!participant) {
         console.log(`[ANSWER DROPPED] socket=${socket.id} — no participant entry found. Status=${gameState.status}`);
+        ack({ error: 'not_joined' });
         return;
       }
       if (gameState.status !== 'active' && gameState.status !== 'showing_answer') {
         console.log(`[ANSWER DROPPED] ${participant.name} — wrong status: ${gameState.status}`);
+        ack({ error: 'wrong_status' });
         return;
       }
       if (participant.currentAnswer !== null) {
         // Already answered — still send ack so client stops retrying
-        socket.emit('answerReceived', { timeTaken: participant.currentTime || 0 });
+        ack({ timeTaken: participant.currentTime || 0, duplicate: true });
         return;
       }
 
@@ -535,10 +551,10 @@ app.prepare().then(() => {
       }
       participant.totalTime += timeTaken;
 
-      console.log(`[ANSWER OK] ${participant.name}: ${data.answer} (correct=${currentQ?.correct}) → ${isCorrect ? '+1000' : 'wrong'} | total=${participant.score}`);
+      console.log(`[ANSWER OK] ${participant.name}: ${data.answer} (correct=${currentQ?.correct}) → ${isCorrect ? '+1000' : 'wrong'} | total=${participant.score} | Q${gameState.currentQuestionIndex + 1}`);
 
-      socket.emit('answerReceived', { timeTaken });
-      broadcastGameState(io);
+      ack({ timeTaken, scored: true });
+      broadcastGameStateThrottled(io);
     });
 
     socket.on('disconnect', () => {

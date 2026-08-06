@@ -269,9 +269,20 @@ export default function ParticipantPage() {
     setAnswerSubmitted(true);
     answerAckedRef.current = false;
     const socket = getSocket();
-    socket.emit('participant:answer', { answer: letter });
 
-    // Retry every 1.5s until server acknowledges (handles lost emits)
+    // Send with ack callback for guaranteed delivery confirmation
+    const sendAnswer = () => {
+      socket.emit('participant:answer', { answer: letter }, (res: any) => {
+        if (res && !res.error) {
+          answerAckedRef.current = true;
+          if (answerRetryRef.current) { clearInterval(answerRetryRef.current); answerRetryRef.current = null; }
+        }
+      });
+    };
+
+    sendAnswer();
+
+    // Retry every 1s until server acknowledges (handles lost emits / reconnects)
     if (answerRetryRef.current) clearInterval(answerRetryRef.current);
     answerRetryRef.current = setInterval(() => {
       if (answerAckedRef.current) {
@@ -280,9 +291,9 @@ export default function ParticipantPage() {
       }
       const s = getSocket();
       if (s.connected) {
-        s.emit('participant:answer', { answer: letter });
+        sendAnswer();
       }
-    }, 1500);
+    }, 1000);
   }, [answerSubmitted]);
 
   const getOptionClass = (option: string) => {
