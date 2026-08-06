@@ -15,16 +15,6 @@ config:
   socketio-v3:
     query:
       EIO: "4"
-  payload:
-    - path: ""
-      fields: []
-      loadAll: false
-  variables:
-    options:
-      - "A"
-      - "B"
-      - "C"
-      - "D"
 
 scenarios:
   - name: "Quiz participant"
