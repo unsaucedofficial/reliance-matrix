@@ -125,6 +125,7 @@ export default function ParticipantPage() {
     nextRound: RoundInfo;
   } | null>(null);
   const prevQuestionRef = useRef(-1);
+  const currentQuestionIndexRef = useRef(-1);
   const localTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -183,6 +184,7 @@ export default function ParticipantPage() {
 
     socket.on('gameState', (state: GameState) => {
       setGameState(state);
+      currentQuestionIndexRef.current = state.currentQuestionIndex;
       if (state.currentQuestionIndex !== prevQuestionRef.current) {
         setSelectedAnswer(null);
         selectedAnswerRef.current = null;
@@ -271,8 +273,8 @@ export default function ParticipantPage() {
     answerAckedRef.current = false;
     const socket = getSocket();
 
-    // Include question index so server scores against the right question
-    const questionIndex = gameState?.currentQuestionIndex ?? -1;
+    // Use ref (always current) instead of closure-captured gameState
+    const questionIndex = currentQuestionIndexRef.current;
     answerQuestionIndexRef.current = questionIndex;
 
     // Send with ack callback for guaranteed delivery confirmation

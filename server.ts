@@ -36,6 +36,7 @@ interface Participant {
   currentAnswer: string | null;
   currentTime: number | null;
   isAI?: boolean;
+  answeredQuestions: Set<number>;  // track which questions this participant answered
 }
 
 interface GameState {
@@ -106,6 +107,7 @@ function createAIParticipant(): Participant {
     currentAnswer: null,
     currentTime: null,
     isAI: true,
+    answeredQuestions: new Set(),
   };
 }
 
@@ -147,8 +149,18 @@ function scheduleAIAnswer(io: SocketIOServer) {
 }
 
 // ── Helpers ────────────────────────────────────────────
-function getParticipantsList(): Participant[] {
-  return Array.from(gameState.participants.values());
+function getParticipantsList() {
+  return Array.from(gameState.participants.values()).map(p => ({
+    id: p.id,
+    name: p.name,
+    score: p.score,
+    totalTime: p.totalTime,
+    answeredCount: p.answeredCount,
+    correctCount: p.correctCount,
+    currentAnswer: p.currentAnswer,
+    currentTime: p.currentTime,
+    isAI: p.isAI,
+  }));
 }
 
 function getLeaderboard(): Participant[] {
@@ -501,6 +513,7 @@ app.prepare().then(() => {
         currentAnswer: null,
         currentTime: null,
         isAI: false,
+        answeredQuestions: new Set(),
       };
 
       gameState.participants.set(socket.id, participant);
@@ -521,21 +534,23 @@ app.prepare().then(() => {
         ack({ error: 'not_joined' });
         return;
       }
+
+      // Determine which question this answer is for
+      const answerQuestionIndex = (typeof data.questionIndex === 'number' && data.questionIndex >= 0)
+        ? data.questionIndex
+        : gameState.currentQuestionIndex;
+
+      // DEFINITIVE duplicate check: has this participant already answered THIS question?
+      if (participant.answeredQuestions.has(answerQuestionIndex)) {
+        ack({ timeTaken: participant.currentTime || 0, duplicate: true });
+        return;
+      }
+
       if (gameState.status !== 'active' && gameState.status !== 'showing_answer') {
         console.log(`[ANSWER DROPPED] ${participant.name} — wrong status: ${gameState.status}`);
         ack({ error: 'wrong_status' });
         return;
       }
-      if (participant.currentAnswer !== null) {
-        ack({ timeTaken: participant.currentTime || 0, duplicate: true });
-        return;
-      }
-
-      // Use the question index from the client if provided, to prevent race conditions
-      // where host:nextQuestion advances the index before this answer is processed
-      const answerQuestionIndex = (typeof data.questionIndex === 'number' && data.questionIndex >= 0)
-        ? data.questionIndex
-        : gameState.currentQuestionIndex;
 
       const isLateAnswer = answerQuestionIndex !== gameState.currentQuestionIndex;
       const targetQ = questions[answerQuestionIndex];
@@ -548,29 +563,9 @@ app.prepare().then(() => {
         ? Date.now() - gameState.questionStartTime
         : 0;
 
-      // For late answers: score them but do NOT set currentAnswer/currentTime
-      // because those fields belong to the CURRENT question — setting them would
-      // block the user from answering the current question.
-      if (isLateAnswer) {
-        participant.answeredCount++;
-        const isCorrect = targetQ && data.answer === targetQ.correct;
-        if (isCorrect) {
-          participant.score += 1000;
-          participant.correctCount++;
-        }
-        participant.totalTime += timeTaken;
-        console.log(`[ANSWER OK-LATE] ${participant.name}: ${data.answer} (correct=${targetQ?.correct}) → ${isCorrect ? '+1000' : 'wrong'} | total=${participant.score} | Q${answerQuestionIndex + 1}`);
-        ack({ timeTaken, scored: true });
-        broadcastGameStateThrottled(io);
-        return;
-      }
-
-      // Normal (on-time) answer
-      participant.currentAnswer = data.answer;
-      participant.currentTime = timeTaken;
+      // Mark this question as answered (prevents double-scoring from retries)
+      participant.answeredQuestions.add(answerQuestionIndex);
       participant.answeredCount++;
-
-      gameState.answers.set(socket.id, { answer: data.answer, time: timeTaken });
 
       const isCorrect = targetQ && data.answer === targetQ.correct;
       if (isCorrect) {
@@ -579,7 +574,14 @@ app.prepare().then(() => {
       }
       participant.totalTime += timeTaken;
 
-      console.log(`[ANSWER OK] ${participant.name}: ${data.answer} (correct=${targetQ?.correct}) → ${isCorrect ? '+1000' : 'wrong'} | total=${participant.score} | Q${answerQuestionIndex + 1}`);
+      // For on-time answers, also set currentAnswer so host stats work
+      if (!isLateAnswer) {
+        participant.currentAnswer = data.answer;
+        participant.currentTime = timeTaken;
+        gameState.answers.set(socket.id, { answer: data.answer, time: timeTaken });
+      }
+
+      console.log(`[ANSWER ${isLateAnswer ? 'OK-LATE' : 'OK'}] ${participant.name}: ${data.answer} (correct=${targetQ?.correct}) → ${isCorrect ? '+1000' : 'wrong'} | total=${participant.score} | Q${answerQuestionIndex + 1}`);
 
       ack({ timeTaken, scored: true });
       broadcastGameStateThrottled(io);
