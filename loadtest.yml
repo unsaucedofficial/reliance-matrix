@@ -36,6 +36,7 @@ scenarios:
           channel: "participant:answer"
           data:
             answer: "B"
+            questionIndex: 0
       - think: 15
 
       # Q2 - 15s timer
@@ -44,6 +45,7 @@ scenarios:
           channel: "participant:answer"
           data:
             answer: "C"
+            questionIndex: 1
       - think: 15
 
       # Q3 - 20s timer
@@ -52,6 +54,7 @@ scenarios:
           channel: "participant:answer"
           data:
             answer: "A"
+            questionIndex: 2
       - think: 15
 
       # Q4 - 25s timer
@@ -60,6 +63,7 @@ scenarios:
           channel: "participant:answer"
           data:
             answer: "D"
+            questionIndex: 3
       - think: 15
 
       # Q5 - 25s timer
@@ -68,6 +72,7 @@ scenarios:
           channel: "participant:answer"
           data:
             answer: "B"
+            questionIndex: 4
       - think: 15
 
       # Q6 - 30s timer
@@ -76,6 +81,7 @@ scenarios:
           channel: "participant:answer"
           data:
             answer: "A"
+            questionIndex: 5
       - think: 15
 
       # Q7 - 30s timer
@@ -84,6 +90,7 @@ scenarios:
           channel: "participant:answer"
           data:
             answer: "C"
+            questionIndex: 6
       - think: 15
 
       # Q8 - 45s timer
@@ -92,6 +99,7 @@ scenarios:
           channel: "participant:answer"
           data:
             answer: "B"
+            questionIndex: 7
       - think: 15
 
       # Q9 - 35s timer
@@ -100,6 +108,7 @@ scenarios:
           channel: "participant:answer"
           data:
             answer: "D"
+            questionIndex: 8
       - think: 15
 
       # Q10 - 60s timer
@@ -108,6 +117,7 @@ scenarios:
           channel: "participant:answer"
           data:
             answer: "A"
+            questionIndex: 9
       - think: 20
 
       # Round 2 - 10 questions (mostly 20-35s timers)
@@ -116,6 +126,7 @@ scenarios:
           channel: "participant:answer"
           data:
             answer: "C"
+            questionIndex: 10
       - think: 15
 
       - think: "{{ $randomNumber(2,15) }}"
@@ -123,6 +134,7 @@ scenarios:
           channel: "participant:answer"
           data:
             answer: "A"
+            questionIndex: 11
       - think: 15
 
       - think: "{{ $randomNumber(2,15) }}"
@@ -130,6 +142,7 @@ scenarios:
           channel: "participant:answer"
           data:
             answer: "B"
+            questionIndex: 12
       - think: 15
 
       - think: "{{ $randomNumber(2,15) }}"
@@ -137,6 +150,7 @@ scenarios:
           channel: "participant:answer"
           data:
             answer: "D"
+            questionIndex: 13
       - think: 15
 
       - think: "{{ $randomNumber(2,15) }}"
@@ -144,6 +158,7 @@ scenarios:
           channel: "participant:answer"
           data:
             answer: "A"
+            questionIndex: 14
       - think: 15
 
       - think: "{{ $randomNumber(2,20) }}"
@@ -151,6 +166,7 @@ scenarios:
           channel: "participant:answer"
           data:
             answer: "C"
+            questionIndex: 15
       - think: 15
 
       - think: "{{ $randomNumber(2,20) }}"
@@ -158,6 +174,7 @@ scenarios:
           channel: "participant:answer"
           data:
             answer: "B"
+            questionIndex: 16
       - think: 15
 
       - think: "{{ $randomNumber(2,25) }}"
@@ -165,6 +182,7 @@ scenarios:
           channel: "participant:answer"
           data:
             answer: "A"
+            questionIndex: 17
       - think: 15
 
       - think: "{{ $randomNumber(2,30) }}"
@@ -172,6 +190,7 @@ scenarios:
           channel: "participant:answer"
           data:
             answer: "D"
+            questionIndex: 18
       - think: 15
 
       - think: "{{ $randomNumber(2,20) }}"
@@ -179,6 +198,7 @@ scenarios:
           channel: "participant:answer"
           data:
             answer: "B"
+            questionIndex: 19
       - think: 20
 
       # Round 3 - 10 questions (20-45s timers)
@@ -187,6 +207,7 @@ scenarios:
           channel: "participant:answer"
           data:
             answer: "C"
+            questionIndex: 20
       - think: 15
 
       - think: "{{ $randomNumber(2,15) }}"
@@ -194,6 +215,7 @@ scenarios:
           channel: "participant:answer"
           data:
             answer: "A"
+            questionIndex: 21
       - think: 15
 
       - think: "{{ $randomNumber(2,20) }}"
@@ -201,6 +223,7 @@ scenarios:
           channel: "participant:answer"
           data:
             answer: "D"
+            questionIndex: 22
       - think: 15
 
       - think: "{{ $randomNumber(2,20) }}"
@@ -208,6 +231,7 @@ scenarios:
           channel: "participant:answer"
           data:
             answer: "B"
+            questionIndex: 23
       - think: 15
 
       - think: "{{ $randomNumber(2,20) }}"
@@ -215,6 +239,7 @@ scenarios:
           channel: "participant:answer"
           data:
             answer: "A"
+            questionIndex: 24
       - think: 15
 
       - think: "{{ $randomNumber(2,20) }}"
@@ -222,6 +247,7 @@ scenarios:
           channel: "participant:answer"
           data:
             answer: "C"
+            questionIndex: 25
       - think: 15
 
       - think: "{{ $randomNumber(2,20) }}"
@@ -229,6 +255,7 @@ scenarios:
           channel: "participant:answer"
           data:
             answer: "D"
+            questionIndex: 26
       - think: 15
 
       - think: "{{ $randomNumber(2,20) }}"
@@ -236,6 +263,7 @@ scenarios:
           channel: "participant:answer"
           data:
             answer: "B"
+            questionIndex: 27
       - think: 15
 
       - think: "{{ $randomNumber(2,35) }}"
@@ -243,6 +271,7 @@ scenarios:
           channel: "participant:answer"
           data:
             answer: "A"
+            questionIndex: 28
       - think: 15
 
       - think: "{{ $randomNumber(2,20) }}"
@@ -250,4 +279,5 @@ scenarios:
           channel: "participant:answer"
           data:
             answer: "C"
+            questionIndex: 29
       - think: 30
