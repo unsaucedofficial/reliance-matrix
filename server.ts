@@ -68,6 +68,7 @@ const questions: Question[] = JSON.parse(fs.readFileSync(questionsPath, 'utf-8')
 // ── Constants ──────────────────────────────────────────
 const DEFAULT_QUESTION_TIME = 15;
 const AI_PARTICIPANT_ID = '__AI_PLAYER__';
+const HOST_PASSWORD = 'familystore@121';
 
 function getQuestionTime(questionIndex: number): number {
   const q = questions[questionIndex];
@@ -260,10 +261,16 @@ function startTimer(io: SocketIOServer) {
 
   scheduleAIAnswer(io);
 
+  // Broadcast timer to ALL connected sockets (host + participants + unjoined)
   timerInterval = setInterval(() => {
     if (gameState.status === 'paused') return;
     gameState.timeRemaining--;
-    io.emit('timer', { timeRemaining: gameState.timeRemaining });
+    const timerData = {
+      timeRemaining: gameState.timeRemaining,
+      questionTimer: getQuestionTime(gameState.currentQuestionIndex),
+      serverTime: Date.now(),
+    };
+    io.emit('timer', timerData);
     if (gameState.timeRemaining <= 0) {
       if (timerInterval) clearInterval(timerInterval);
       gameState.status = 'showing_answer';
@@ -291,14 +298,8 @@ function resetGame() {
   gameState.timeRemaining = DEFAULT_QUESTION_TIME;
   gameState.answers.clear();
   gameState.sessionCode = generateSessionCode();
-  for (const [, p] of gameState.participants) {
-    p.score = 0;
-    p.totalTime = 0;
-    p.answeredCount = 0;
-    p.correctCount = 0;
-    p.currentAnswer = null;
-    p.currentTime = null;
-  }
+  // Remove ALL participants including AI — fresh start
+  gameState.participants.clear();
 }
 
 // ── Start Server ───────────────────────────────────────
@@ -315,9 +316,14 @@ app.prepare().then(() => {
     console.log(`Connected: ${socket.id}`);
 
     // ── Host Events ──
-    socket.on('host:join', () => {
+    socket.on('host:join', (data: { password?: string }) => {
+      if (!data?.password || data.password !== HOST_PASSWORD) {
+        socket.emit('host:authFailed');
+        return;
+      }
       socket.join('host');
       ensureAIParticipant();
+      socket.emit('host:authSuccess');
       broadcastGameState(io);
     });
 
@@ -430,6 +436,11 @@ app.prepare().then(() => {
 
     socket.on('host:reset', () => {
       resetGame();
+      // Tell all participants to reset their UI back to join screen
+      io.to('participants').emit('forceReset');
+      // Remove all sockets from 'participants' room
+      io.in('participants').socketsLeave('participants');
+      ensureAIParticipant();
       broadcastGameState(io);
     });
 

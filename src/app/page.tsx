@@ -121,10 +121,29 @@ export default function ParticipantPage() {
     nextRound: RoundInfo;
   } | null>(null);
   const prevQuestionRef = useRef(-1);
+  const localTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     setWindowSize({ w: window.innerWidth, h: window.innerHeight });
   }, []);
+
+  // Local timer fallback — runs client-side to prevent stuck timers
+  useEffect(() => {
+    if (localTimerRef.current) clearInterval(localTimerRef.current);
+
+    if (gameState?.status === 'active' && gameState.timeRemaining > 0) {
+      localTimerRef.current = setInterval(() => {
+        setGameState(prev => {
+          if (!prev || prev.status !== 'active' || prev.timeRemaining <= 0) return prev;
+          return { ...prev, timeRemaining: prev.timeRemaining - 1 };
+        });
+      }, 1000);
+    }
+
+    return () => {
+      if (localTimerRef.current) clearInterval(localTimerRef.current);
+    };
+  }, [gameState?.status, gameState?.currentQuestionIndex]);
 
   useEffect(() => {
     const socket = getSocket();
@@ -148,6 +167,7 @@ export default function ParticipantPage() {
       }
     });
 
+    // Server timer sync — overrides local timer with authoritative value
     socket.on('timer', (data: { timeRemaining: number }) => {
       setGameState(prev => prev ? { ...prev, timeRemaining: data.timeRemaining } : prev);
     });
@@ -171,6 +191,22 @@ export default function ParticipantPage() {
       setRoundComplete(data);
     });
 
+    // Host reset — kick back to join screen
+    socket.on('forceReset', () => {
+      setJoined(false);
+      setName('');
+      setDisplayName('');
+      setGameState(null);
+      setSelectedAnswer(null);
+      setAnswerSubmitted(false);
+      setAnswerReveal(null);
+      setShowConfetti(false);
+      setShowWrongAnim(false);
+      setShowLeaderboard(false);
+      setRoundComplete(null);
+      prevQuestionRef.current = -1;
+    });
+
     return () => {
       socket.off('joined');
       socket.off('gameState');
@@ -178,6 +214,7 @@ export default function ParticipantPage() {
       socket.off('answerRevealed');
       socket.off('showLeaderboard');
       socket.off('roundComplete');
+      socket.off('forceReset');
     };
   }, [selectedAnswer]);
 
@@ -601,6 +638,7 @@ export default function ParticipantPage() {
               <div className="bg-cyan-500/10 rounded-xl p-3 border border-cyan-500/20">
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-cyan-400 font-semibold">🤖 AI picked: {answerReveal.aiAnswer}</span>
+                  <span className="text-xs text-gray-400">{(answerReveal.aiTime / 1000).toFixed(1)}s</span>
                 </div>
                 <p className={`text-xs font-semibold mt-1 ${answerReveal.aiAnswer === answerReveal.correct ? 'text-green-400' : 'text-red-400'}`}>
                   {answerReveal.aiAnswer === answerReveal.correct ? '✅ AI got it right' : '❌ AI got it wrong!'}
