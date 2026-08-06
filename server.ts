@@ -537,10 +537,10 @@ app.prepare().then(() => {
         ? data.questionIndex
         : gameState.currentQuestionIndex;
 
+      const isLateAnswer = answerQuestionIndex !== gameState.currentQuestionIndex;
       const targetQ = questions[answerQuestionIndex];
 
-      // If the question has moved on AND the client sent a different index, score against client's question
-      if (answerQuestionIndex !== gameState.currentQuestionIndex) {
+      if (isLateAnswer) {
         console.log(`[ANSWER LATE] ${participant.name}: answered Q${answerQuestionIndex + 1} but server is on Q${gameState.currentQuestionIndex + 1} — scoring against Q${answerQuestionIndex + 1}`);
       }
 
@@ -548,6 +548,24 @@ app.prepare().then(() => {
         ? Date.now() - gameState.questionStartTime
         : 0;
 
+      // For late answers: score them but do NOT set currentAnswer/currentTime
+      // because those fields belong to the CURRENT question — setting them would
+      // block the user from answering the current question.
+      if (isLateAnswer) {
+        participant.answeredCount++;
+        const isCorrect = targetQ && data.answer === targetQ.correct;
+        if (isCorrect) {
+          participant.score += 1000;
+          participant.correctCount++;
+        }
+        participant.totalTime += timeTaken;
+        console.log(`[ANSWER OK-LATE] ${participant.name}: ${data.answer} (correct=${targetQ?.correct}) → ${isCorrect ? '+1000' : 'wrong'} | total=${participant.score} | Q${answerQuestionIndex + 1}`);
+        ack({ timeTaken, scored: true });
+        broadcastGameStateThrottled(io);
+        return;
+      }
+
+      // Normal (on-time) answer
       participant.currentAnswer = data.answer;
       participant.currentTime = timeTaken;
       participant.answeredCount++;

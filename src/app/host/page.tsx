@@ -152,9 +152,10 @@ function RoundBanner({ roundInfo, currentRound }: { roundInfo: RoundInfo; curren
 function AIScoreCard({ aiPlayer, humanParticipants }: { aiPlayer: Participant | null; humanParticipants: Participant[] }) {
   if (!aiPlayer) return null;
 
-  const topHumanScore = humanParticipants.length > 0
-    ? Math.max(...humanParticipants.map(p => p.score))
-    : 0;
+  const topHuman = humanParticipants.length > 0
+    ? humanParticipants.reduce((best, p) => p.score > best.score ? p : best, humanParticipants[0])
+    : null;
+  const topHumanScore = topHuman?.score || 0;
   const humansBeatingAI = humanParticipants.filter(p => p.score > aiPlayer.score).length;
   const aiWinning = aiPlayer.score > topHumanScore;
 
@@ -172,7 +173,7 @@ function AIScoreCard({ aiPlayer, humanParticipants }: { aiPlayer: Participant | 
         <div className={`rounded-2xl p-3 text-center ${!aiWinning && topHumanScore > 0 ? 'bg-brand-500/15 ring-2 ring-brand-500/40' : 'bg-white/5'}`}>
           <p className="text-2xl mb-1">👥</p>
           <p className="text-2xl font-extrabold text-brand-400">{topHumanScore}</p>
-          <p className="text-xs text-gray-500">Top Human</p>
+          <p className="text-xs text-gray-500">{topHuman ? `${topHuman.correctCount}/${topHuman.answeredCount}` : 'Top Human'}</p>
         </div>
       </div>
       <p className="text-xs text-center mt-3 font-semibold">
