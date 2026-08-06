@@ -112,6 +112,7 @@ export default function ParticipantPage() {
   const [answerSubmitted, setAnswerSubmitted] = useState(false);
   const answerAckedRef = useRef(false);
   const answerRetryRef = useRef<NodeJS.Timeout | null>(null);
+  const answerQuestionIndexRef = useRef<number>(-1);
   const [answerReveal, setAnswerReveal] = useState<AnswerReveal | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
   const [showWrongAnim, setShowWrongAnim] = useState(false);
@@ -174,7 +175,7 @@ export default function ParticipantPage() {
         if (pendingAnswer && !answerAckedRef.current) {
           // Small delay to ensure re-join is processed first
           setTimeout(() => {
-            socket.emit('participant:answer', { answer: pendingAnswer });
+            socket.emit('participant:answer', { answer: pendingAnswer, questionIndex: answerQuestionIndexRef.current });
           }, 200);
         }
       }
@@ -270,9 +271,13 @@ export default function ParticipantPage() {
     answerAckedRef.current = false;
     const socket = getSocket();
 
+    // Include question index so server scores against the right question
+    const questionIndex = gameState?.currentQuestionIndex ?? -1;
+    answerQuestionIndexRef.current = questionIndex;
+
     // Send with ack callback for guaranteed delivery confirmation
     const sendAnswer = () => {
-      socket.emit('participant:answer', { answer: letter }, (res: any) => {
+      socket.emit('participant:answer', { answer: letter, questionIndex }, (res: any) => {
         if (res && !res.error) {
           answerAckedRef.current = true;
           if (answerRetryRef.current) { clearInterval(answerRetryRef.current); answerRetryRef.current = null; }

@@ -509,14 +509,13 @@ app.prepare().then(() => {
       broadcastGameState(io);
     });
 
-    socket.on('participant:answer', (data: { answer: string }, ackFn?: (res: any) => void) => {
+    socket.on('participant:answer', (data: { answer: string; questionIndex?: number }, ackFn?: (res: any) => void) => {
       const participant = gameState.participants.get(socket.id);
       const ack = (res: any) => {
         if (typeof ackFn === 'function') ackFn(res);
         socket.emit('answerReceived', res);  // belt-and-suspenders: emit AND ack
       };
 
-      // Log every answer attempt for debugging
       if (!participant) {
         console.log(`[ANSWER DROPPED] socket=${socket.id} — no participant entry found. Status=${gameState.status}`);
         ack({ error: 'not_joined' });
@@ -528,9 +527,21 @@ app.prepare().then(() => {
         return;
       }
       if (participant.currentAnswer !== null) {
-        // Already answered — still send ack so client stops retrying
         ack({ timeTaken: participant.currentTime || 0, duplicate: true });
         return;
+      }
+
+      // Use the question index from the client if provided, to prevent race conditions
+      // where host:nextQuestion advances the index before this answer is processed
+      const answerQuestionIndex = (typeof data.questionIndex === 'number' && data.questionIndex >= 0)
+        ? data.questionIndex
+        : gameState.currentQuestionIndex;
+
+      const targetQ = questions[answerQuestionIndex];
+
+      // If the question has moved on AND the client sent a different index, score against client's question
+      if (answerQuestionIndex !== gameState.currentQuestionIndex) {
+        console.log(`[ANSWER LATE] ${participant.name}: answered Q${answerQuestionIndex + 1} but server is on Q${gameState.currentQuestionIndex + 1} — scoring against Q${answerQuestionIndex + 1}`);
       }
 
       const timeTaken = gameState.questionStartTime
@@ -543,15 +554,14 @@ app.prepare().then(() => {
 
       gameState.answers.set(socket.id, { answer: data.answer, time: timeTaken });
 
-      const currentQ = questions[gameState.currentQuestionIndex];
-      const isCorrect = currentQ && data.answer === currentQ.correct;
+      const isCorrect = targetQ && data.answer === targetQ.correct;
       if (isCorrect) {
         participant.score += 1000;
         participant.correctCount++;
       }
       participant.totalTime += timeTaken;
 
-      console.log(`[ANSWER OK] ${participant.name}: ${data.answer} (correct=${currentQ?.correct}) → ${isCorrect ? '+1000' : 'wrong'} | total=${participant.score} | Q${gameState.currentQuestionIndex + 1}`);
+      console.log(`[ANSWER OK] ${participant.name}: ${data.answer} (correct=${targetQ?.correct}) → ${isCorrect ? '+1000' : 'wrong'} | total=${participant.score} | Q${answerQuestionIndex + 1}`);
 
       ack({ timeTaken, scored: true });
       broadcastGameStateThrottled(io);
