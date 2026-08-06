@@ -1,0 +1,33 @@
+config:
+  target: "https://reliance-matrix.onrender.com"
+  phases:
+    # Quick test: 20 users in 10 seconds
+    - duration: 10
+      arrivalRate: 2
+      name: "Quick smoke test - 20 users"
+  engines:
+    socketio-v3:
+      transports: ["websocket"]
+  socketio-v3:
+    query:
+      EIO: "4"
+
+scenarios:
+  - name: "Quick join test"
+    engine: socketio-v3
+    flow:
+      - emit:
+          channel: "join"
+          data:
+            name: "Test_{{ $randomNumber(1000,9999) }}"
+      - think: 5
+      - emit:
+          channel: "submitAnswer"
+          data:
+            answer: "B"
+      - think: 10
+      - emit:
+          channel: "submitAnswer"
+          data:
+            answer: "C"
+      - think: 30
