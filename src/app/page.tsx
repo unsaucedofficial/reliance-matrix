@@ -108,6 +108,7 @@ export default function ParticipantPage() {
   const [displayName, setDisplayName] = useState('');
   const [gameState, setGameState] = useState<GameState | null>(null);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
+  const selectedAnswerRef = useRef<string | null>(null);
   const [answerSubmitted, setAnswerSubmitted] = useState(false);
   const [answerReveal, setAnswerReveal] = useState<AnswerReveal | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
@@ -164,6 +165,7 @@ export default function ParticipantPage() {
       setGameState(state);
       if (state.currentQuestionIndex !== prevQuestionRef.current) {
         setSelectedAnswer(null);
+        selectedAnswerRef.current = null;
         setAnswerSubmitted(false);
         setAnswerReveal(null);
         setShowConfetti(false);
@@ -181,10 +183,11 @@ export default function ParticipantPage() {
 
     socket.on('answerRevealed', (data: AnswerReveal) => {
       setAnswerReveal(data);
-      if (selectedAnswer === data.correct) {
+      const answer = selectedAnswerRef.current;
+      if (answer === data.correct) {
         setShowConfetti(true);
         setTimeout(() => setShowConfetti(false), 4000);
-      } else if (selectedAnswer && selectedAnswer !== data.correct) {
+      } else if (answer && answer !== data.correct) {
         setShowWrongAnim(true);
         setTimeout(() => setShowWrongAnim(false), 1000);
       }
@@ -205,6 +208,7 @@ export default function ParticipantPage() {
       setDisplayName('');
       setGameState(null);
       setSelectedAnswer(null);
+      selectedAnswerRef.current = null;
       setAnswerSubmitted(false);
       setAnswerReveal(null);
       setShowConfetti(false);
@@ -224,7 +228,7 @@ export default function ParticipantPage() {
       socket.off('roundComplete');
       socket.off('forceReset');
     };
-  }, [selectedAnswer, displayName]);
+  }, [displayName]);
 
   const handleJoin = useCallback(() => {
     if (!name.trim()) return;
@@ -236,6 +240,7 @@ export default function ParticipantPage() {
     if (answerSubmitted) return;
     const letter = option.charAt(0);
     setSelectedAnswer(letter);
+    selectedAnswerRef.current = letter;
     setAnswerSubmitted(true);
     const socket = getSocket();
     socket.emit('participant:answer', { answer: letter });

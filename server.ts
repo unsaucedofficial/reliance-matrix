@@ -501,7 +501,8 @@ app.prepare().then(() => {
 
     socket.on('participant:answer', (data: { answer: string }) => {
       const participant = gameState.participants.get(socket.id);
-      if (!participant || gameState.status !== 'active') return;
+      // Accept answers during 'active' AND 'showing_answer' (grace period for network delay)
+      if (!participant || (gameState.status !== 'active' && gameState.status !== 'showing_answer')) return;
       if (participant.currentAnswer !== null) return;
 
       const timeTaken = gameState.questionStartTime
