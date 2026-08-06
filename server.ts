@@ -501,9 +501,21 @@ app.prepare().then(() => {
 
     socket.on('participant:answer', (data: { answer: string }) => {
       const participant = gameState.participants.get(socket.id);
-      // Accept answers during 'active' AND 'showing_answer' (grace period for network delay)
-      if (!participant || (gameState.status !== 'active' && gameState.status !== 'showing_answer')) return;
-      if (participant.currentAnswer !== null) return;
+
+      // Log every answer attempt for debugging
+      if (!participant) {
+        console.log(`[ANSWER DROPPED] socket=${socket.id} — no participant entry found. Status=${gameState.status}`);
+        return;
+      }
+      if (gameState.status !== 'active' && gameState.status !== 'showing_answer') {
+        console.log(`[ANSWER DROPPED] ${participant.name} — wrong status: ${gameState.status}`);
+        return;
+      }
+      if (participant.currentAnswer !== null) {
+        // Already answered — still send ack so client stops retrying
+        socket.emit('answerReceived', { timeTaken: participant.currentTime || 0 });
+        return;
+      }
 
       const timeTaken = gameState.questionStartTime
         ? Date.now() - gameState.questionStartTime
@@ -516,11 +528,14 @@ app.prepare().then(() => {
       gameState.answers.set(socket.id, { answer: data.answer, time: timeTaken });
 
       const currentQ = questions[gameState.currentQuestionIndex];
-      if (currentQ && data.answer === currentQ.correct) {
+      const isCorrect = currentQ && data.answer === currentQ.correct;
+      if (isCorrect) {
         participant.score += 1000;
         participant.correctCount++;
       }
       participant.totalTime += timeTaken;
+
+      console.log(`[ANSWER OK] ${participant.name}: ${data.answer} (correct=${currentQ?.correct}) → ${isCorrect ? '+1000' : 'wrong'} | total=${participant.score}`);
 
       socket.emit('answerReceived', { timeTaken });
       broadcastGameState(io);

@@ -110,6 +110,8 @@ export default function ParticipantPage() {
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const selectedAnswerRef = useRef<string | null>(null);
   const [answerSubmitted, setAnswerSubmitted] = useState(false);
+  const answerAckedRef = useRef(false);
+  const answerRetryRef = useRef<NodeJS.Timeout | null>(null);
   const [answerReveal, setAnswerReveal] = useState<AnswerReveal | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
   const [showWrongAnim, setShowWrongAnim] = useState(false);
@@ -154,10 +156,27 @@ export default function ParticipantPage() {
       setJoined(true);
     });
 
-    // On reconnect, re-join with the same name so server recognizes us
+    // Server confirmed our answer was received
+    socket.on('answerReceived', () => {
+      answerAckedRef.current = true;
+      if (answerRetryRef.current) {
+        clearInterval(answerRetryRef.current);
+        answerRetryRef.current = null;
+      }
+    });
+
+    // On reconnect, re-join with the same name and re-send unacknowledged answer
     socket.on('connect', () => {
       if (displayName) {
         socket.emit('participant:join', { name: displayName });
+        // Re-send answer if it was submitted but not acknowledged by server
+        const pendingAnswer = selectedAnswerRef.current;
+        if (pendingAnswer && !answerAckedRef.current) {
+          // Small delay to ensure re-join is processed first
+          setTimeout(() => {
+            socket.emit('participant:answer', { answer: pendingAnswer });
+          }, 200);
+        }
       }
     });
 
@@ -167,6 +186,8 @@ export default function ParticipantPage() {
         setSelectedAnswer(null);
         selectedAnswerRef.current = null;
         setAnswerSubmitted(false);
+        answerAckedRef.current = false;
+        if (answerRetryRef.current) { clearInterval(answerRetryRef.current); answerRetryRef.current = null; }
         setAnswerReveal(null);
         setShowConfetti(false);
         setShowWrongAnim(false);
@@ -210,6 +231,8 @@ export default function ParticipantPage() {
       setSelectedAnswer(null);
       selectedAnswerRef.current = null;
       setAnswerSubmitted(false);
+      answerAckedRef.current = false;
+      if (answerRetryRef.current) { clearInterval(answerRetryRef.current); answerRetryRef.current = null; }
       setAnswerReveal(null);
       setShowConfetti(false);
       setShowWrongAnim(false);
@@ -221,12 +244,14 @@ export default function ParticipantPage() {
     return () => {
       socket.off('joined');
       socket.off('connect');
+      socket.off('answerReceived');
       socket.off('gameState');
       socket.off('timer');
       socket.off('answerRevealed');
       socket.off('showLeaderboard');
       socket.off('roundComplete');
       socket.off('forceReset');
+      if (answerRetryRef.current) { clearInterval(answerRetryRef.current); answerRetryRef.current = null; }
     };
   }, [displayName]);
 
@@ -242,8 +267,22 @@ export default function ParticipantPage() {
     setSelectedAnswer(letter);
     selectedAnswerRef.current = letter;
     setAnswerSubmitted(true);
+    answerAckedRef.current = false;
     const socket = getSocket();
     socket.emit('participant:answer', { answer: letter });
+
+    // Retry every 1.5s until server acknowledges (handles lost emits)
+    if (answerRetryRef.current) clearInterval(answerRetryRef.current);
+    answerRetryRef.current = setInterval(() => {
+      if (answerAckedRef.current) {
+        if (answerRetryRef.current) { clearInterval(answerRetryRef.current); answerRetryRef.current = null; }
+        return;
+      }
+      const s = getSocket();
+      if (s.connected) {
+        s.emit('participant:answer', { answer: letter });
+      }
+    }, 1500);
   }, [answerSubmitted]);
 
   const getOptionClass = (option: string) => {
